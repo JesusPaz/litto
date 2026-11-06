@@ -1,0 +1,575 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0A9C517B96BDD5189B55465E /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C04BC4307A2331B5C727927 /* Models.swift */; };
+		0CC144151C09BD45F748889E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 73ECAE238B5A0400D062D688 /* PrivacyInfo.xcprivacy */; };
+		140C5FE905F89B94E1E69D8B /* LittoCore in Frameworks */ = {isa = PBXBuildFile; productRef = B8C7D97BCB55E7FEC156A6A0 /* LittoCore */; };
+		282445A1A9E90B24707BC509 /* LittoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C0E1D5C323532B5CDD948B /* LittoApp.swift */; };
+		29AA405E14D439D92C73ABE7 /* LittoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38F8F5765A0AA023B86CD09 /* LittoApp.swift */; };
+		29B5C65757B2E6FDB2C908C7 /* DeckViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E86D681BC1D12393042FEA /* DeckViews.swift */; };
+		3062FAE063B6052344243717 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 73ECAE238B5A0400D062D688 /* PrivacyInfo.xcprivacy */; };
+		3C8A4640F1C2183B61677E95 /* StudyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D059DBBA1408502821426 /* StudyView.swift */; };
+		43434355DB9A8F6A1EEB7D84 /* StudyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D059DBBA1408502821426 /* StudyView.swift */; };
+		4F4E9EAA99961AB2D68496AF /* CardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1D094A77FDFB245DC2BDE2 /* CardDetailView.swift */; };
+		5197931FE51D0FE68D413334 /* Speech.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EF449F0110A2B294EA03E9 /* Speech.swift */; };
+		593272E070161B045ECA2363 /* Demo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC6AC191FD026F5D67A0E1 /* Demo.swift */; };
+		6FE0A24D10F781B844A664E6 /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F65D240A176A142F2B6868D /* Store.swift */; };
+		709A39381EF69F0B4E28CAC5 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C04BC4307A2331B5C727927 /* Models.swift */; };
+		71AAE17EE6F57CF6E0778B1B /* LittoStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F737EA79DD2DC15F47014D /* LittoStyle.swift */; };
+		74C13F22EECC0BEF221E3D9C /* LittoCore in Frameworks */ = {isa = PBXBuildFile; productRef = 94C900051D832604D5752567 /* LittoCore */; };
+		82E04297155F25696E731F34 /* LittoStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F737EA79DD2DC15F47014D /* LittoStyle.swift */; };
+		8E966F4ED542FFA50B66FA7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E12D95EB293DCE6F8083912C /* Assets.xcassets */; };
+		95F0F65230553ED6C0AE5F1A /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F65D240A176A142F2B6868D /* Store.swift */; };
+		9745FB3DB8F0306B1218211A /* StudySession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E54C8F604BC88335F25B7ED /* StudySession.swift */; };
+		A6E8200E52DCD9F3CEE8649B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533338483F7578544D901871 /* SettingsView.swift */; };
+		B000C7BAEB43F3F35BC8125C /* FolderSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D58F3F434BFEE29FD9B843 /* FolderSync.swift */; };
+		B34F0E99113A60963552082E /* DeckViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E86D681BC1D12393042FEA /* DeckViews.swift */; };
+		C8A33ED8361DECAF68824929 /* DeckImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55832D2C41F57E2F4816155E /* DeckImporter.swift */; };
+		CA2B4DCC1D6A7EE0B7BD48FE /* Speech.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EF449F0110A2B294EA03E9 /* Speech.swift */; };
+		D51072F79FF71A0E170D3621 /* Demo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC6AC191FD026F5D67A0E1 /* Demo.swift */; };
+		DA0AB87FDD35E53B5334F4F8 /* StudySession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E54C8F604BC88335F25B7ED /* StudySession.swift */; };
+		DEAEF7C89AB12F680C38D164 /* DeckImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55832D2C41F57E2F4816155E /* DeckImporter.swift */; };
+		EB7B6E4D7AA1ED42075B1AB4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E12D95EB293DCE6F8083912C /* Assets.xcassets */; };
+		FA1A1DE035A14C0998ABCA66 /* CardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1D094A77FDFB245DC2BDE2 /* CardDetailView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		090EBB9BB84DA262F92CADB7 /* Litto.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Litto.entitlements; sourceTree = "<group>"; };
+		160D059DBBA1408502821426 /* StudyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyView.swift; sourceTree = "<group>"; };
+		322E8FD454E2039EC9B07001 /* litto */ = {isa = PBXFileReference; lastKnownFileType = folder; name = litto; path = ../..; sourceTree = SOURCE_ROOT; };
+		3E54C8F604BC88335F25B7ED /* StudySession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySession.swift; sourceTree = "<group>"; };
+		51E86D681BC1D12393042FEA /* DeckViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckViews.swift; sourceTree = "<group>"; };
+		533338483F7578544D901871 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		55832D2C41F57E2F4816155E /* DeckImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckImporter.swift; sourceTree = "<group>"; };
+		6F65D240A176A142F2B6868D /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
+		73ECAE238B5A0400D062D688 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		8C04BC4307A2331B5C727927 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		A3EF449F0110A2B294EA03E9 /* Speech.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Speech.swift; sourceTree = "<group>"; };
+		A7D58F3F434BFEE29FD9B843 /* FolderSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSync.swift; sourceTree = "<group>"; };
+		AC2E51271D206A511ACB32E9 /* Litto.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Litto.entitlements; sourceTree = "<group>"; };
+		B38F8F5765A0AA023B86CD09 /* LittoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LittoApp.swift; sourceTree = "<group>"; };
+		B8F737EA79DD2DC15F47014D /* LittoStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LittoStyle.swift; sourceTree = "<group>"; };
+		BC1D094A77FDFB245DC2BDE2 /* CardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailView.swift; sourceTree = "<group>"; };
+		BF554F9C207CE760D020AB9E /* LittoiOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LittoiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7BC6AC191FD026F5D67A0E1 /* Demo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Demo.swift; sourceTree = "<group>"; };
+		D5C0E1D5C323532B5CDD948B /* LittoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LittoApp.swift; sourceTree = "<group>"; };
+		E0DF7EF0EFC0539F9973E6CF /* LittoMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LittoMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E12D95EB293DCE6F8083912C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		5855CC6AA4E1DB2C2B73EA62 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				140C5FE905F89B94E1E69D8B /* LittoCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E56240811B8BF6BAC5BC48DB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				74C13F22EECC0BEF221E3D9C /* LittoCore in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		01E54041CAAB91A4ED85F7CB = {
+			isa = PBXGroup;
+			children = (
+				25256F16D651DE792631640D /* iOS */,
+				528D3EC9436EBC2525AB11BD /* macOS */,
+				2B023303AD9B0D7030BFDBEA /* Packages */,
+				6CAAB29396C8105171C04582 /* Resources */,
+				8478D92F64C8AFF2FDBB6E8D /* Shared */,
+				B5C474FFD0BEEE578857C573 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		25256F16D651DE792631640D /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				AC2E51271D206A511ACB32E9 /* Litto.entitlements */,
+				D5C0E1D5C323532B5CDD948B /* LittoApp.swift */,
+			);
+			path = iOS;
+			sourceTree = "<group>";
+		};
+		2B023303AD9B0D7030BFDBEA /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				322E8FD454E2039EC9B07001 /* litto */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		528D3EC9436EBC2525AB11BD /* macOS */ = {
+			isa = PBXGroup;
+			children = (
+				A7D58F3F434BFEE29FD9B843 /* FolderSync.swift */,
+				090EBB9BB84DA262F92CADB7 /* Litto.entitlements */,
+				B38F8F5765A0AA023B86CD09 /* LittoApp.swift */,
+				533338483F7578544D901871 /* SettingsView.swift */,
+			);
+			path = macOS;
+			sourceTree = "<group>";
+		};
+		6CAAB29396C8105171C04582 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E12D95EB293DCE6F8083912C /* Assets.xcassets */,
+				73ECAE238B5A0400D062D688 /* PrivacyInfo.xcprivacy */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		8478D92F64C8AFF2FDBB6E8D /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				BC1D094A77FDFB245DC2BDE2 /* CardDetailView.swift */,
+				55832D2C41F57E2F4816155E /* DeckImporter.swift */,
+				51E86D681BC1D12393042FEA /* DeckViews.swift */,
+				C7BC6AC191FD026F5D67A0E1 /* Demo.swift */,
+				B8F737EA79DD2DC15F47014D /* LittoStyle.swift */,
+				8C04BC4307A2331B5C727927 /* Models.swift */,
+				A3EF449F0110A2B294EA03E9 /* Speech.swift */,
+				6F65D240A176A142F2B6868D /* Store.swift */,
+				3E54C8F604BC88335F25B7ED /* StudySession.swift */,
+				160D059DBBA1408502821426 /* StudyView.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		B5C474FFD0BEEE578857C573 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BF554F9C207CE760D020AB9E /* LittoiOS.app */,
+				E0DF7EF0EFC0539F9973E6CF /* LittoMac.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6382EF6855B3FC26C5F68FD3 /* LittoMac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DEAE1F753B04EF83859A0B8F /* Build configuration list for PBXNativeTarget "LittoMac" */;
+			buildPhases = (
+				7BEC4A99B814592E382DED43 /* Sources */,
+				0A6895515CFD78767CD9229B /* Resources */,
+				E56240811B8BF6BAC5BC48DB /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LittoMac;
+			packageProductDependencies = (
+				94C900051D832604D5752567 /* LittoCore */,
+			);
+			productName = LittoMac;
+			productReference = E0DF7EF0EFC0539F9973E6CF /* LittoMac.app */;
+			productType = "com.apple.product-type.application";
+		};
+		BC05BEE26C4B569F779D9652 /* LittoiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BD82C1C3D4C5632FDA1E04FA /* Build configuration list for PBXNativeTarget "LittoiOS" */;
+			buildPhases = (
+				EB31EA246660DED7B1115A4D /* Sources */,
+				DC039C492DEA8C861030F33D /* Resources */,
+				5855CC6AA4E1DB2C2B73EA62 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LittoiOS;
+			packageProductDependencies = (
+				B8C7D97BCB55E7FEC156A6A0 /* LittoCore */,
+			);
+			productName = LittoiOS;
+			productReference = BF554F9C207CE760D020AB9E /* LittoiOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D5E9634C445138CB9D051CD2 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					6382EF6855B3FC26C5F68FD3 = {
+						DevelopmentTeam = Y76K9N6M4R;
+						ProvisioningStyle = Automatic;
+					};
+					BC05BEE26C4B569F779D9652 = {
+						DevelopmentTeam = Y76K9N6M4R;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 2B197994989E7A6F161653FB /* Build configuration list for PBXProject "Litto" */;
+			developmentRegion = es;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				es,
+			);
+			mainGroup = 01E54041CAAB91A4ED85F7CB;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				ECA4697DB182D1B1FC053D84 /* XCLocalSwiftPackageReference "../.." */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = B5C474FFD0BEEE578857C573 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6382EF6855B3FC26C5F68FD3 /* LittoMac */,
+				BC05BEE26C4B569F779D9652 /* LittoiOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0A6895515CFD78767CD9229B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8E966F4ED542FFA50B66FA7C /* Assets.xcassets in Resources */,
+				0CC144151C09BD45F748889E /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DC039C492DEA8C861030F33D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EB7B6E4D7AA1ED42075B1AB4 /* Assets.xcassets in Resources */,
+				3062FAE063B6052344243717 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		7BEC4A99B814592E382DED43 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FA1A1DE035A14C0998ABCA66 /* CardDetailView.swift in Sources */,
+				C8A33ED8361DECAF68824929 /* DeckImporter.swift in Sources */,
+				B34F0E99113A60963552082E /* DeckViews.swift in Sources */,
+				D51072F79FF71A0E170D3621 /* Demo.swift in Sources */,
+				B000C7BAEB43F3F35BC8125C /* FolderSync.swift in Sources */,
+				29AA405E14D439D92C73ABE7 /* LittoApp.swift in Sources */,
+				82E04297155F25696E731F34 /* LittoStyle.swift in Sources */,
+				709A39381EF69F0B4E28CAC5 /* Models.swift in Sources */,
+				A6E8200E52DCD9F3CEE8649B /* SettingsView.swift in Sources */,
+				5197931FE51D0FE68D413334 /* Speech.swift in Sources */,
+				6FE0A24D10F781B844A664E6 /* Store.swift in Sources */,
+				9745FB3DB8F0306B1218211A /* StudySession.swift in Sources */,
+				43434355DB9A8F6A1EEB7D84 /* StudyView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EB31EA246660DED7B1115A4D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4F4E9EAA99961AB2D68496AF /* CardDetailView.swift in Sources */,
+				DEAEF7C89AB12F680C38D164 /* DeckImporter.swift in Sources */,
+				29B5C65757B2E6FDB2C908C7 /* DeckViews.swift in Sources */,
+				593272E070161B045ECA2363 /* Demo.swift in Sources */,
+				282445A1A9E90B24707BC509 /* LittoApp.swift in Sources */,
+				71AAE17EE6F57CF6E0778B1B /* LittoStyle.swift in Sources */,
+				0A9C517B96BDD5189B55465E /* Models.swift in Sources */,
+				CA2B4DCC1D6A7EE0B7BD48FE /* Speech.swift in Sources */,
+				95F0F65230553ED6C0AE5F1A /* Store.swift in Sources */,
+				DA0AB87FDD35E53B5334F4F8 /* StudySession.swift in Sources */,
+				3C8A4640F1C2183B61677E95 /* StudyView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1F201AE995901BCFDC8053EC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = macOS/Litto.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jesuspaz.litto.mac;
+				PRODUCT_NAME = Litto;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		3D88FBA83258F9784D5EAE8C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = iOS/Litto.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIBackgroundModes = "remote-notification";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jesuspaz.litto.ios;
+				PRODUCT_NAME = Litto;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		40CAAAEC030F48CB5E86D1BF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = Y76K9N6M4R;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Litto;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		40E88B06147CB3DB76970591 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = iOS/Litto.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIBackgroundModes = "remote-notification";
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jesuspaz.litto.ios;
+				PRODUCT_NAME = Litto;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		ABA7F61F2FB3A59C23B3CCA9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = macOS/Litto.entitlements;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jesuspaz.litto.mac;
+				PRODUCT_NAME = Litto;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		E9F4488C6DEF35948478E2A2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = Y76K9N6M4R;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Litto;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 0.1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2B197994989E7A6F161653FB /* Build configuration list for PBXProject "Litto" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E9F4488C6DEF35948478E2A2 /* Debug */,
+				40CAAAEC030F48CB5E86D1BF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		BD82C1C3D4C5632FDA1E04FA /* Build configuration list for PBXNativeTarget "LittoiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				40E88B06147CB3DB76970591 /* Debug */,
+				3D88FBA83258F9784D5EAE8C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DEAE1F753B04EF83859A0B8F /* Build configuration list for PBXNativeTarget "LittoMac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ABA7F61F2FB3A59C23B3CCA9 /* Debug */,
+				1F201AE995901BCFDC8053EC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		ECA4697DB182D1B1FC053D84 /* XCLocalSwiftPackageReference "../.." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../..;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		94C900051D832604D5752567 /* LittoCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LittoCore;
+		};
+		B8C7D97BCB55E7FEC156A6A0 /* LittoCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LittoCore;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = D5E9634C445138CB9D051CD2 /* Project object */;
+}
