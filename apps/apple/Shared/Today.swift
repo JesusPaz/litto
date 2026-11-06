@@ -113,7 +113,7 @@ struct TodayCard: View {
                 Text(detail(estimate: estimate))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
+                    .lineLimit(2...4)
                 Button(action: onStart) {
                     Text(minutes > 0 ? "Empezar · \(minutes) min" : "Empezar")
                         .font(.headline)

@@ -215,6 +215,7 @@ struct StudyView: View {
         } description: {
             VStack(spacing: 8) {
                 Text(summary)
+                TreeTodayNote()
                 if left.counts.total > 0 {
                     Text("Quedan \(left.counts.total) tarjetas (\(Minutes.text(left.estimate()))). Mañana siguen, sin prisa.")
                 } else if let next = session.decksNextDue {

@@ -215,3 +215,61 @@ import Testing
         #expect(SessionPlanner.updatedPace(10, sessionSeconds: 600, answers: 2) == 10, "too few answers to tell")
     }
 }
+
+@Suite struct TreeTests {
+    var calendar: Calendar = {
+        var c = Calendar(identifier: .gregorian)
+        c.timeZone = TimeZone(identifier: "America/Bogota")!
+        return c
+    }()
+
+    func day(_ n: Int) -> Date {
+        StudyDay.start(of: calendar.date(from: DateComponents(year: 2026, month: 1, day: 1, hour: 12))!.addingTimeInterval(Double(n) * 86400), calendar: calendar)
+    }
+
+    func days(_ range: some Sequence<Int>, answers: Int = 20) -> [Date: Int] {
+        Dictionary(uniqueKeysWithValues: range.map { (day($0), answers) })
+    }
+
+    @Test func aSeedBeforeStudying() {
+        let tree = Tree.grow(answersByDay: [:], now: day(0), calendar: calendar)
+        #expect(tree.stage == .seed)
+        #expect(tree.health == .healthy)
+        #expect(tree.nextDayMultiplier == 1)
+    }
+
+    @Test func streaksGrowFaster() {
+        let daily = Tree.grow(answersByDay: days(0..<30), now: day(29), calendar: calendar)
+        let everyOther = Tree.grow(answersByDay: days(stride(from: 0, to: 60, by: 2)), now: day(58), calendar: calendar)
+        #expect(daily.studyDays == 30 && everyOther.studyDays == 30)
+        #expect(daily.growth > everyOther.growth * 1.4)
+        #expect(daily.streak == 30 && daily.studiedToday)
+        #expect(daily.rings == 4)
+        #expect((2...4).contains(daily.heightMeters), "about 3 m after a month")
+    }
+
+    @Test func shortDaysDoNotCount() {
+        let tree = Tree.grow(answersByDay: [day(0): 9], now: day(0), calendar: calendar)
+        #expect(tree.studyDays == 0)
+    }
+
+    @Test func driesWhileAwayButNeverShrinks() {
+        let studied = days(0..<10)
+        let before = Tree.grow(answersByDay: studied, now: day(10), calendar: calendar)
+        #expect(before.health == .healthy && before.streak == 10, "the streak survives the next day")
+        let thirsty = Tree.grow(answersByDay: studied, now: day(11), calendar: calendar)
+        #expect(thirsty.health == .thirsty && thirsty.streak == 0)
+        #expect(Tree.grow(answersByDay: studied, now: day(14), calendar: calendar).health == .drying)
+        let dry = Tree.grow(answersByDay: studied, now: day(30), calendar: calendar)
+        #expect(dry.health == .dry)
+        #expect(dry.growth == before.growth)
+        let back = Tree.grow(answersByDay: studied.merging([day(30): 15]) { $1 }, now: day(30), calendar: calendar)
+        #expect(back.health == .healthy && back.streak == 1)
+    }
+
+    @Test func becomesAGiantAfterYears() {
+        let tree = Tree.grow(answersByDay: days(0..<(3 * 365)), now: day(3 * 365 - 1), calendar: calendar)
+        #expect(tree.stage == .giant)
+        #expect(tree.heightMeters < Tree.maxHeight)
+    }
+}

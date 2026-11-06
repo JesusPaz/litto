@@ -1,6 +1,66 @@
 {
   "sourceLanguage": "es",
   "strings": {
+    "%@ · %lld anillos": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ · %#@rings@"
+          },
+          "substitutions": {
+            "rings": {
+              "argNum": 2,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg ring"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg rings"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ · %#@rings@"
+          },
+          "substitutions": {
+            "rings": {
+              "argNum": 2,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg anillo"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg anillos"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "%@ · %lld respuestas, %lld nuevas.": {
       "localizations": {
         "en": {
@@ -434,12 +494,32 @@
         }
       }
     },
+    "Arbolito": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sapling"
+          }
+        }
+      }
+    },
     "Bien": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
             "value": "Good"
+          }
+        }
+      }
+    },
+    "Brote": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sprout"
           }
         }
       }
@@ -490,6 +570,46 @@
           "stringUnit": {
             "state": "translated",
             "value": "Claude"
+          }
+        }
+      }
+    },
+    "Con %lld respuestas más, hoy crece tu árbol": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld more answer and your tree grows today"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld more answers and your tree grows today"
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Con %lld respuesta más, hoy crece tu árbol"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Con %lld respuestas más, hoy crece tu árbol"
+                }
+              }
+            }
           }
         }
       }
@@ -794,6 +914,16 @@
         }
       }
     },
+    "Gran árbol": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Great tree"
+          }
+        }
+      }
+    },
     "Hora": {
       "localizations": {
         "en": {
@@ -810,6 +940,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Today"
+          }
+        }
+      }
+    },
+    "Hoy tu árbol creció": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Your tree grew today"
           }
         }
       }
@@ -1334,6 +1474,66 @@
         }
       }
     },
+    "Racha de %lld días · crece ×%@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%#@streak@ · grows ×%2$@"
+          },
+          "substitutions": {
+            "streak": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg-day streak"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "%arg-day streak"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%#@streak@ · crece ×%2$@"
+          },
+          "substitutions": {
+            "streak": {
+              "argNum": 1,
+              "formatSpecifier": "lld",
+              "variations": {
+                "plural": {
+                  "one": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "Racha de %arg día"
+                    }
+                  },
+                  "other": {
+                    "stringUnit": {
+                      "state": "translated",
+                      "value": "Racha de %arg días"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "Recordatorio diario": {
       "localizations": {
         "en": {
@@ -1360,6 +1560,66 @@
           "stringUnit": {
             "state": "translated",
             "value": "Reviews"
+          }
+        }
+      }
+    },
+    "Sano": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Healthy"
+          }
+        }
+      }
+    },
+    "Sano · estudia hoy para seguir la racha": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Healthy · study today to keep the streak"
+          }
+        }
+      }
+    },
+    "Se está secando · vuelve y reverdece": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Drying out · come back and it turns green again"
+          }
+        }
+      }
+    },
+    "Seco · una sesión lo empieza a recuperar": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dry · one session starts bringing it back"
+          }
+        }
+      }
+    },
+    "Secuoya gigante": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giant sequoia"
+          }
+        }
+      }
+    },
+    "Semilla": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Seed"
           }
         }
       }
@@ -1430,6 +1690,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Session time"
+          }
+        }
+      }
+    },
+    "Tiene sed · estudia hoy": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thirsty · study today"
           }
         }
       }
@@ -1580,6 +1850,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Delete “%@” and all its progress?"
+          }
+        }
+      }
+    },
+    "Árbol": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tree"
+          }
+        }
+      }
+    },
+    "Árbol gigante": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giant tree"
+          }
+        }
+      }
+    },
+    "Árbol joven": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Young tree"
           }
         }
       }

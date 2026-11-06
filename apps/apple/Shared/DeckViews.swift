@@ -14,10 +14,21 @@ struct RootView: View {
     @State private var showingSettings = false
 
     var body: some View {
+        #if DEBUG
+        if Demo.step == "trees" { TreeGallery() } else { content }
+        #else
+        content
+        #endif
+    }
+
+    private var content: some View {
         NavigationSplitView {
             TimelineView(.everyMinute) { timeline in
                 List(selection: $selection) {
                     if !decks.isEmpty {
+                        Section {
+                            TreeCard(now: timeline.date)
+                        }
                         Section {
                             TodayCard(decks: decks, now: timeline.date) { router.startToday = true }
                         }
