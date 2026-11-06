@@ -22,4 +22,6 @@ scripts/release/local.sh v0.1.0-rc.1        # mac, ios or all (default)
 
 Xcode notarizes the Mac app and uploads the iPhone build with the signed-in account; no API key on disk. The Mac part tags the commit and publishes the GitHub release with the ZIP and checksums. The DMG is CI-only because notarizing it needs `notarytool` credentials.
 
+After publishing, `local.sh` runs `scripts/release/homebrew.sh <tag>`, which opens a PR in [JesusPaz/homebrew-tap](https://github.com/JesusPaz/homebrew-tap) with the cask generated from the published ZIP (`litto@preview` for `-rc.N`, `litto` for stable; they conflict on purpose). Review and merge it by hand. To retry only that step, run the script again with the same tag.
+
 The App Store Connect record for `com.jesuspaz.litto.ios` must exist before the first TestFlight upload; Apple's API cannot create it.

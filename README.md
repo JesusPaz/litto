@@ -88,7 +88,13 @@ Deck format:
 
 ## Install
 
-Download the notarized Mac app from [Releases](https://github.com/JesusPaz/litto/releases) and move it to Applications. The iPhone app ships through TestFlight.
+Install the Mac preview with Homebrew:
+
+```sh
+brew install --cask JesusPaz/tap/litto@preview
+```
+
+Update it with `brew upgrade --cask litto@preview`. Or download the notarized app from [Releases](https://github.com/JesusPaz/litto/releases) and move it to Applications. The iPhone app ships through TestFlight.
 
 The MCP server ships inside the Mac app. Connect it to Claude Code once:
 

@@ -50,4 +50,5 @@ if [[ "$platform" != ios ]]; then
     flags=(--latest)
     [[ "$tag" != *-rc.* ]] || flags=(--prerelease --latest=false)
     gh release create "$tag" --verify-tag --generate-notes --title "Litto $tag" "${flags[@]}" dist/*
+    scripts/release/homebrew.sh "$tag"
 fi

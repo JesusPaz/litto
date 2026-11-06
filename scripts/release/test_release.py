@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 import datetime
+import hashlib
 from version import parse
 
 SCRIPTS = Path(__file__).parent.resolve()
@@ -47,6 +48,19 @@ class ReleaseTests(unittest.TestCase):
         delivery = load('eas_delivery', 'eas-delivery.py')
         self.assertEqual(delivery.expected_assets('v0.1.0-rc.1'),
                          {'Litto-v0.1.0-rc.1-macOS.dmg', 'Litto-v0.1.0-rc.1-macOS.zip', 'SHA256SUMS'})
+
+    def test_cask_tracks_exact_archive_and_channel(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            archive, cask = Path(tmp) / 'app.zip', Path(tmp) / 'litto.rb'
+            archive.write_bytes(b'litto')
+            for tag, token, conflict in [('v0.1.0-rc.2', 'litto@preview', 'litto'), ('v0.1.0', 'litto', 'litto@preview')]:
+                subprocess.run([sys.executable, str(SCRIPTS / 'cask.py'), tag, str(archive), str(cask)], check=True)
+                text = cask.read_text()
+                self.assertIn(f'cask "{token}" do', text)
+                self.assertIn(f'version "{tag[1:]}"', text)
+                self.assertIn('sha256 "' + hashlib.sha256(b'litto').hexdigest() + '"', text)
+                self.assertIn(f'conflicts_with cask: "{conflict}"', text)
+                self.assertIn('Litto-v#{version}-macOS.zip', text)
 
 
 if __name__ == '__main__':
