@@ -8,6 +8,7 @@ struct LittoApp: App {
 
     init() {
         container = Store.makeContainer()
+        Reminder.shared.activate()
         FolderSync.shared.start(context: container.mainContext)
     }
 

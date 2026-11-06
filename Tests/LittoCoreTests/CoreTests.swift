@@ -185,3 +185,41 @@ import Testing
         #expect(throws: DeckValidationError.self) { try deck.validate() }
     }
 }
+
+@Suite struct SessionPlannerTests {
+    @Test func backlogLeavesNoRoomForNewCards() {
+        let backlog = QueueCounts(new: 20, learning: 0, review: 200)
+        #expect(SessionPlanner.newCards(backlog, limit: 600, secondsPerAnswer: 10) == 0)
+        #expect(SessionPlanner.estimate(backlog, secondsPerAnswer: 10) == 2600)
+    }
+
+    @Test func newCardsFillTheTimeReviewsLeave() {
+        let light = QueueCounts(new: 20, learning: 0, review: 30)
+        // 600 s − 300 s of reviews = 300 s, at 30 s per new card.
+        #expect(SessionPlanner.newCards(light, limit: 600, secondsPerAnswer: 10) == 10)
+        #expect(SessionPlanner.newCards(light, limit: nil, secondsPerAnswer: 10) == 20)
+    }
+
+    @Test func newCardsAreSpreadAmongReviews() {
+        #expect(!SessionPlanner.newIsDue(reviewsSinceNew: 3, plannedNew: 5, introduced: 0, reviews: 20))
+        #expect(SessionPlanner.newIsDue(reviewsSinceNew: 4, plannedNew: 5, introduced: 0, reviews: 20))
+        #expect(SessionPlanner.newIsDue(reviewsSinceNew: 0, plannedNew: 5, introduced: 1, reviews: 0), "no reviews left")
+        #expect(!SessionPlanner.newIsDue(reviewsSinceNew: 9, plannedNew: 5, introduced: 5, reviews: 20), "plan used up")
+    }
+
+    @Test func preferNewJumpsAheadOfReviewsButNotDueLearning() {
+        let now = Date()
+        var items = [
+            QueueItem(id: "new", state: .new, due: now, order: 0),
+            QueueItem(id: "review", state: .review, due: now, order: 0),
+        ]
+        #expect(StudyQueue.next(items, newAllowance: 1, now: now, preferNew: true) == "new")
+        items.append(QueueItem(id: "learning", state: .learning, due: now.addingTimeInterval(-60), order: 0))
+        #expect(StudyQueue.next(items, newAllowance: 1, now: now, preferNew: true) == "learning")
+    }
+
+    @Test func paceAdaptsSlowly() {
+        #expect(SessionPlanner.updatedPace(10, sessionSeconds: 600, answers: 30) == 13)
+        #expect(SessionPlanner.updatedPace(10, sessionSeconds: 600, answers: 2) == 10, "too few answers to tell")
+    }
+}

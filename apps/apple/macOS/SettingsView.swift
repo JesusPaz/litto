@@ -2,7 +2,6 @@ import AppKit
 import SwiftUI
 
 struct SettingsView: View {
-    @AppStorage("autoSpeak") private var autoSpeak = true
     @State private var copied = false
     private let folder = FolderSync.shared.library.root
 
@@ -30,9 +29,7 @@ struct SettingsView: View {
                     }
                 }
             }
-            Section("Estudio") {
-                Toggle("Leer la palabra en voz alta al mostrarla", isOn: $autoSpeak)
-            }
+            StudySettingsSection()
             Section("Carpeta compartida") {
                 LabeledContent("Mazos e imágenes") {
                     HStack {

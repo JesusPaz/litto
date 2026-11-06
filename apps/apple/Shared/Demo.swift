@@ -4,7 +4,7 @@ import LittoCore
 import SwiftData
 
 /// Simulator screenshots without UI automation:
-/// LITTO_SEED=<deck.json> imports a deck, LITTO_DEMO=deck|card|study|answer opens that screen.
+/// LITTO_SEED=<deck.json> imports a deck, LITTO_DEMO=deck|card|study|answer|today opens that screen.
 enum Demo {
     static var step: String? {
         guard let value = ProcessInfo.processInfo.environment["LITTO_DEMO"], value != "deck" else { return nil }

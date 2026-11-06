@@ -9,6 +9,8 @@ Native SwiftUI apps, FSRS-6 scheduling, iCloud sync, and an MCP server so Claude
 ## What it does
 
 - **Anki-style reviews with FSRS-6** ([swift-fsrs](https://github.com/open-spaced-repetition/swift-fsrs)). Answer *Otra vez / Difícil / Bien / Fácil*; each button shows when the card comes back. Daily new-card limit, study day starting at 4 AM, 1 min / 10 min learning steps, undo.
+- **Short daily sessions.** Pick 5, 10, 15, 20 or 30 minutes and an hour for the daily reminder. The session ends on time, not when the pile runs out: due reviews come first, new words only fill the time they leave, and whatever does not fit waits for tomorrow. After a few days away you catch up in daily sessions of the same length instead of facing an hour-long backlog. "Hoy" shows what is due across all decks, how long all of it would take, and the words themselves.
+- **Imports Anki decks** (`.apkg` / `.colpkg`, old and new Anki formats): one card per note and one deck per top-level Anki deck. Fields are matched by name (word, meaning, IPA, example, image…); cloze notes become fill-in-the-gap cards. Anki sounds are dropped in favour of Apple voices, and cards start as new.
 - **Rich cards**: word, meaning, IPA, definition, example with translation, notes and an image.
 - **Pronunciation with Apple voices**, offline. Litto picks the best installed voice (Premium, then Enhanced). The system dictionary is one tap away.
 - **SwiftUI + SwiftData**, synced between iPhone and Mac through your private iCloud database.
@@ -40,6 +42,7 @@ The deck file owns content; the app owns review progress. Reusing a card `id` co
 | `remove_cards` | Remove cards |
 | `update_deck` | Name, description, voice language, new cards per day |
 | `get_progress` | Cards you struggle with, or all cards |
+| `import_anki` | Import an Anki `.apkg` into the shared folder |
 
 Images are downscaled to 1024 px JPEG and stored by content hash.
 
@@ -84,7 +87,7 @@ Litto › Settings shows the same command with a copy button. To run the server 
 Requires Xcode 26+. The Xcode project is generated with [XcodeGen](https://github.com/yonaskolb/XcodeGen) from `apps/apple/project.yml` and committed.
 
 ```sh
-swift test                                   # core: deck format, media, FSRS, daily queue
+swift test                                   # core: deck format, media, FSRS, daily queue, sessions, Anki import
 open apps/apple/Litto.xcodeproj              # schemes LittoMac and LittoiOS
 ```
 

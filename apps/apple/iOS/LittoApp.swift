@@ -7,6 +7,7 @@ struct LittoApp: App {
 
     init() {
         container = Store.makeContainer()
+        Reminder.shared.activate()
         #if DEBUG
         Demo.seed(container.mainContext)
         #endif

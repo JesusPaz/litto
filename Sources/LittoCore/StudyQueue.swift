@@ -62,14 +62,60 @@ public enum StudyQueue {
     }
 
     /// Order: learning cards already due, then reviews due today, then new cards,
-    /// then learning cards due soon. `nil` means done for today.
-    public static func next<ID>(_ items: [QueueItem<ID>], newAllowance: Int, now: Date, calendar: Calendar = .current) -> ID? {
+    /// then learning cards due soon. `preferNew` puts a new card ahead of the reviews,
+    /// so a timed session can mix them. `nil` means done for today.
+    public static func next<ID>(_ items: [QueueItem<ID>], newAllowance: Int, now: Date, preferNew: Bool = false, calendar: Calendar = .current) -> ID? {
         let dayEnd = StudyDay.end(of: now, calendar: calendar)
         let learning = items.filter { $0.state == .learning || $0.state == .relearning }.sorted { $0.due < $1.due }
+        let new = newAllowance > 0 ? items.filter { $0.state == .new }.min(by: { $0.order < $1.order }) : nil
         if let card = learning.first(where: { $0.due <= now }) { return card.id }
+        if preferNew, let new { return new.id }
         if let card = items.filter({ $0.state == .review && $0.due < dayEnd }).min(by: { $0.due < $1.due }) { return card.id }
-        if newAllowance > 0, let card = items.filter({ $0.state == .new }).min(by: { $0.order < $1.order }) { return card.id }
+        if let new { return new.id }
         if let card = learning.first(where: { $0.due <= now.addingTimeInterval(learnAhead) }) { return card.id }
         return nil
+    }
+}
+
+/// Sizes a timed session so it ends on time instead of when the pile runs out.
+/// Reviews come first; new cards only take the time the reviews leave free,
+/// so after a few days away Litto catches you up before teaching more.
+public enum SessionPlanner {
+    public static let defaultSecondsPerAnswer: Double = 10
+    /// A new card takes about three answers on its first day: 1 min step, 10 min step, graduation.
+    public static let answersPerNewCard: Double = 3
+    /// No new card is started this close to the end, so its first steps fit in the session.
+    public static let newCardCutoff: TimeInterval = 90
+
+    public static func answers(_ counts: QueueCounts) -> Double {
+        Double(counts.review + counts.learning) + Double(counts.new) * answersPerNewCard
+    }
+
+    /// Time to clear everything due today.
+    public static func estimate(_ counts: QueueCounts, secondsPerAnswer: Double) -> TimeInterval {
+        answers(counts) * secondsPerAnswer
+    }
+
+    /// New cards that fit in `limit` after the due reviews; all of them when there is no limit.
+    public static func newCards(_ counts: QueueCounts, limit: TimeInterval?, secondsPerAnswer: Double) -> Int {
+        guard let limit else { return counts.new }
+        let free = limit - Double(counts.review + counts.learning) * secondsPerAnswer
+        guard free > 0 else { return 0 }
+        return min(counts.new, Int(free / (secondsPerAnswer * answersPerNewCard)))
+    }
+
+    /// Spreads `plannedNew` new cards evenly among `reviews` reviews: true when the next card should be new.
+    public static func newIsDue(reviewsSinceNew: Int, plannedNew: Int, introduced: Int, reviews: Int) -> Bool {
+        guard introduced < plannedNew else { return false }
+        let remaining = plannedNew - introduced
+        let spacing = reviews / max(remaining, 1)
+        return reviewsSinceNew >= spacing
+    }
+
+    /// Learns the user's pace: a weighted average, kept between 3 and 60 seconds.
+    public static func updatedPace(_ previous: Double, sessionSeconds: TimeInterval, answers: Int) -> Double {
+        guard answers >= 5 else { return previous }
+        let measured = sessionSeconds / Double(answers)
+        return min(60, max(3, previous * 0.7 + measured * 0.3))
     }
 }

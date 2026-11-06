@@ -20,6 +20,17 @@ enum LittoStyle {
     static let minTarget: CGFloat = 44
 }
 
+/// Durations the way people say them: "8 min", "1 h 20 min", "menos de 1 min".
+enum Minutes {
+    static func text(_ seconds: TimeInterval) -> String {
+        let minutes = Int((seconds / 60).rounded())
+        if minutes < 1 { return "menos de 1 min" }
+        if minutes < 60 { return "\(minutes) min" }
+        let rest = minutes % 60
+        return rest == 0 ? "\(minutes / 60) h" : "\(minutes / 60) h \(rest) min"
+    }
+}
+
 /// "4 nuevas · 0 aprendiendo · 2 repasar", colored but always readable as text.
 struct CountsLine: View {
     let counts: QueueCounts

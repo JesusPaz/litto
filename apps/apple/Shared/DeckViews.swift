@@ -1,6 +1,7 @@
 import LittoCore
 import SwiftData
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct RootView: View {
     @Environment(\.modelContext) private var context
@@ -8,11 +9,21 @@ struct RootView: View {
     @State private var selection: PersistentIdentifier?
     @State private var importing = false
     @State private var importError: String?
+    @State private var importNote: String?
+    @State private var working = false
+    @State private var studyingToday = false
+    @State private var showingSettings = false
+    private let reminder = Reminder.shared
 
     var body: some View {
         NavigationSplitView {
             TimelineView(.everyMinute) { timeline in
                 List(selection: $selection) {
+                    if !decks.isEmpty {
+                        Section {
+                            TodayCard(decks: decks, now: timeline.date) { studyingToday = true }
+                        }
+                    }
                     ForEach(decks) { deck in
                         DeckRow(deck: deck, now: timeline.date)
                             .tag(deck.persistentModelID)
@@ -26,7 +37,7 @@ struct RootView: View {
                     ContentUnavailableView {
                         Label("Sin mazos", systemImage: "rectangle.stack")
                     } description: {
-                        Text("Pídele a Claude que te cree uno, o importa un archivo JSON.")
+                        Text("Pídele a Claude que te cree uno, o importa un mazo de Anki (.apkg) o un archivo JSON.")
                     } actions: {
                         Button("Importar…") { importing = true }
                         #if os(macOS)
@@ -37,6 +48,13 @@ struct RootView: View {
             }
             .toolbar {
                 Button("Importar", systemImage: "square.and.arrow.down") { importing = true }
+                    .disabled(working)
+                #if os(iOS)
+                Button("Ajustes", systemImage: "gearshape") { showingSettings = true }
+                #endif
+            }
+            .overlay {
+                if working { ProgressView("Importando…").padding().background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12)) }
             }
             #if os(macOS)
             .navigationSplitViewColumnWidth(min: 220, ideal: 260)
@@ -53,11 +71,36 @@ struct RootView: View {
             if selection == nil { selection = decks.first?.persistentModelID }
             #endif
             #if DEBUG
-            if Demo.isOn { selection = decks.first?.persistentModelID }
+            if Demo.step == "today" { studyingToday = true } else if Demo.isOn { selection = decks.first?.persistentModelID }
             #endif
         }
-        .fileImporter(isPresented: $importing, allowedContentTypes: [.json], allowsMultipleSelection: true) { result in
-            importFiles(result)
+        .fileImporter(isPresented: $importing, allowedContentTypes: Self.importTypes, allowsMultipleSelection: true) { result in
+            Task { await importFiles(result) }
+        }
+        #if os(iOS)
+        .fullScreenCover(isPresented: $studyingToday) { StudyView(decks: decks, title: "Hoy", context: context) }
+        .sheet(isPresented: $showingSettings) {
+            NavigationStack {
+                Form { StudySettingsSection() }
+                    .navigationTitle("Ajustes")
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Listo") { showingSettings = false } } }
+            }
+        }
+        #else
+        .sheet(isPresented: $studyingToday) {
+            StudyView(decks: decks, title: "Hoy", context: context).frame(minWidth: 600, minHeight: 620)
+        }
+        #endif
+        .onChange(of: reminder.startRequested, initial: true) { _, requested in
+            guard requested else { return }
+            reminder.startRequested = false
+            if !decks.isEmpty { studyingToday = true }
+        }
+        .alert("Importado", isPresented: Binding(get: { importNote != nil }, set: { if !$0 { importNote = nil } })) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(importNote ?? "")
         }
         .alert("No se pudo importar", isPresented: Binding(get: { importError != nil }, set: { if !$0 { importError = nil } })) {
             Button("OK", role: .cancel) {}
@@ -75,11 +118,20 @@ struct RootView: View {
         try? context.save()
     }
 
-    private func importFiles(_ result: Result<[URL], Error>) {
+    static let importTypes: [UTType] = [.json] + ["apkg", "colpkg"].compactMap { UTType(filenameExtension: $0) }
+
+    private func importFiles(_ result: Result<[URL], Error>) async {
+        working = true
+        defer { working = false }
         do {
+            var notes: [String] = []
             for url in try result.get() {
                 let access = url.startAccessingSecurityScopedResource()
                 defer { if access { url.stopAccessingSecurityScopedResource() } }
+                if url.pathExtension.lowercased() != "json" {
+                    notes.append(try await importAnki(url))
+                    continue
+                }
                 let file = try DeckFile.decode(Data(contentsOf: url))
                 #if os(macOS)
                 // Into the shared folder, so Claude can keep editing it.
@@ -89,9 +141,41 @@ struct RootView: View {
                 try DeckImporter.apply(file, in: context)
                 #endif
             }
+            if !notes.isEmpty { importNote = notes.joined(separator: "\n") }
         } catch {
             importError = String(describing: error)
         }
+    }
+
+    /// Anki decks land as Litto decks; on the Mac they go to the shared folder so Claude can edit them.
+    private func importAnki(_ url: URL) async throws -> String {
+        #if os(macOS)
+        let library = FolderSync.shared.library
+        let media = library.media
+        #else
+        let media = MediaStore(directory: FileManager.default.temporaryDirectory.appendingPathComponent("anki-media-\(UUID().uuidString)"))
+        defer { try? FileManager.default.removeItem(at: media.directory) }
+        #endif
+        let result = try await Task.detached { try AnkiPackage.read(url, media: media) }.value
+        for deck in result.decks {
+            #if os(macOS)
+            var file = deck
+            if library.exists(deck.id), var existing = try? library.load(deck.id) {
+                existing.upsert(deck.cards)
+                file = existing
+            }
+            try library.save(file)
+            #else
+            try DeckImporter.apply(deck, in: context, media: media)
+            #endif
+        }
+        #if os(macOS)
+        FolderSync.shared.scan()
+        #endif
+        let cards = result.decks.reduce(0) { $0 + $1.cards.count }
+        var note = "\(url.lastPathComponent): \(result.decks.count == 1 ? "1 mazo" : "\(result.decks.count) mazos"), \(cards) tarjetas."
+        if result.skipped > 0 { note += " \(result.skipped) notas sin frente o reverso no se importaron." }
+        return note
     }
 }
 
@@ -124,6 +208,7 @@ struct DeckDetailView: View {
     @State private var confirmDelete = false
     @State private var inspected: StudyCard?
     @AppStorage("autoSpeak") private var autoSpeak = true
+    @AppStorage(StudySettings.sessionMinutesKey) private var minutes = StudySettings.defaultMinutes
 
     var body: some View {
         TimelineView(.everyMinute) { timeline in
@@ -170,10 +255,10 @@ struct DeckDetailView: View {
             CardDetailView(card: card, language: deck.language)
         }
         #if os(iOS)
-        .fullScreenCover(isPresented: $studying) { StudyView(deck: deck, context: context) }
+        .fullScreenCover(isPresented: $studying) { StudyView(decks: [deck], title: deck.name, context: context) }
         #else
         .sheet(isPresented: $studying) {
-            StudyView(deck: deck, context: context).frame(minWidth: 600, minHeight: 620)
+            StudyView(decks: [deck], title: deck.name, context: context).frame(minWidth: 600, minHeight: 620)
         }
         #endif
     }
@@ -193,7 +278,7 @@ struct DeckDetailView: View {
                 Button {
                     studying = true
                 } label: {
-                    Text("Estudiar \(counts.total) tarjetas")
+                    Text(minutes > 0 ? "Estudiar · \(minutes) min" : "Estudiar \(counts.total) tarjetas")
                         .font(.headline)
                         .frame(maxWidth: .infinity, minHeight: LittoStyle.minTarget)
                 }
