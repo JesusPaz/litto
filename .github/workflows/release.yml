@@ -1,0 +1,79 @@
+name: Release
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Exact new version: v0.1.0-rc.1 or v0.1.0'
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: litto-apple-delivery
+  cancel-in-progress: false
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Validate new tag on main
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+          RELEASE_REF: ${{ github.ref }}
+        run: |
+          test "$RELEASE_REF" = refs/heads/main
+          python3 scripts/release/version.py "$RELEASE_TAG"
+          if git rev-parse --verify "refs/tags/$RELEASE_TAG" >/dev/null 2>&1; then
+            echo 'Tag already exists. Published versions are immutable; choose a new version.' >&2
+            exit 1
+          fi
+  checks:
+    needs: preflight
+    uses: ./.github/workflows/ci.yml
+  apple:
+    needs: checks
+    uses: ./.github/workflows/apple.yml
+    with:
+      tag: ${{ inputs.tag }}
+      platform: all
+    secrets: inherit
+  publish:
+    needs: apple
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    env:
+      RELEASE_TAG: ${{ inputs.tag }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: '*-release'
+          merge-multiple: true
+          path: dist
+      - name: Tag the tested commit and publish its artifacts
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          if git rev-parse --verify "refs/tags/$RELEASE_TAG" >/dev/null 2>&1; then
+            test "$(git rev-parse "$RELEASE_TAG^{commit}")" = "$GITHUB_SHA"
+          else
+            git tag -a "$RELEASE_TAG" "$GITHUB_SHA" -m "Litto $RELEASE_TAG"
+            git push origin "refs/tags/$RELEASE_TAG"
+          fi
+          flags=(--latest)
+          if [[ "$RELEASE_TAG" == *-rc.* ]]; then flags=(--prerelease --latest=false); fi
+          if gh release view "$RELEASE_TAG" --json isDraft --jq .isDraft > "$RUNNER_TEMP/is-draft"; then
+            # A retry must never replace artifacts from a published release.
+            if [[ "$(cat "$RUNNER_TEMP/is-draft")" == false ]]; then exit 0; fi
+          else
+            gh release create "$RELEASE_TAG" --verify-tag --generate-notes --draft --title "Litto $RELEASE_TAG"
+          fi
+          gh release upload "$RELEASE_TAG" dist/* --clobber
+          gh release edit "$RELEASE_TAG" --draft=false "${flags[@]}"

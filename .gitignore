@@ -3,3 +3,8 @@
 xcuserdata/
 .DS_Store
 dist/
+__pycache__/
+*.p12
+*.p8
+*.mobileprovision
+.env

@@ -10,6 +10,7 @@
 		0A9C517B96BDD5189B55465E /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C04BC4307A2331B5C727927 /* Models.swift */; };
 		0CC144151C09BD45F748889E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 73ECAE238B5A0400D062D688 /* PrivacyInfo.xcprivacy */; };
 		140C5FE905F89B94E1E69D8B /* LittoCore in Frameworks */ = {isa = PBXBuildFile; productRef = B8C7D97BCB55E7FEC156A6A0 /* LittoCore */; };
+		1A5D02B4284A3B8FF99DD5C0 /* LittoCore in Frameworks */ = {isa = PBXBuildFile; productRef = 69A9B17DD45C55554FC87154 /* LittoCore */; };
 		282445A1A9E90B24707BC509 /* LittoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C0E1D5C323532B5CDD948B /* LittoApp.swift */; };
 		29AA405E14D439D92C73ABE7 /* LittoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38F8F5765A0AA023B86CD09 /* LittoApp.swift */; };
 		29B5C65757B2E6FDB2C908C7 /* DeckViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E86D681BC1D12393042FEA /* DeckViews.swift */; };
@@ -24,6 +25,7 @@
 		71AAE17EE6F57CF6E0778B1B /* LittoStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F737EA79DD2DC15F47014D /* LittoStyle.swift */; };
 		74C13F22EECC0BEF221E3D9C /* LittoCore in Frameworks */ = {isa = PBXBuildFile; productRef = 94C900051D832604D5752567 /* LittoCore */; };
 		82E04297155F25696E731F34 /* LittoStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F737EA79DD2DC15F47014D /* LittoStyle.swift */; };
+		897F7F5E5921AD39C57F1CCF /* litto-mcp in Embed Dependencies */ = {isa = PBXBuildFile; fileRef = 418086DE8E1223E0D53AFA2F /* litto-mcp */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		8E966F4ED542FFA50B66FA7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E12D95EB293DCE6F8083912C /* Assets.xcassets */; };
 		95F0F65230553ED6C0AE5F1A /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F65D240A176A142F2B6868D /* Store.swift */; };
 		9745FB3DB8F0306B1218211A /* StudySession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E54C8F604BC88335F25B7ED /* StudySession.swift */; };
@@ -32,23 +34,51 @@
 		B34F0E99113A60963552082E /* DeckViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E86D681BC1D12393042FEA /* DeckViews.swift */; };
 		C8A33ED8361DECAF68824929 /* DeckImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55832D2C41F57E2F4816155E /* DeckImporter.swift */; };
 		CA2B4DCC1D6A7EE0B7BD48FE /* Speech.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EF449F0110A2B294EA03E9 /* Speech.swift */; };
+		CE53C371636C60EF93645C6F /* MCP in Frameworks */ = {isa = PBXBuildFile; productRef = 92F789A42CAFB9237D83BFE9 /* MCP */; };
 		D51072F79FF71A0E170D3621 /* Demo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC6AC191FD026F5D67A0E1 /* Demo.swift */; };
 		DA0AB87FDD35E53B5334F4F8 /* StudySession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E54C8F604BC88335F25B7ED /* StudySession.swift */; };
+		DAE1CE92861AD8AFD014520A /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804EE249FEF565173AC78819 /* main.swift */; };
 		DEAEF7C89AB12F680C38D164 /* DeckImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55832D2C41F57E2F4816155E /* DeckImporter.swift */; };
 		EB7B6E4D7AA1ED42075B1AB4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E12D95EB293DCE6F8083912C /* Assets.xcassets */; };
 		FA1A1DE035A14C0998ABCA66 /* CardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1D094A77FDFB245DC2BDE2 /* CardDetailView.swift */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4DA1EDB1123F952281888363 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D5E9634C445138CB9D051CD2 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3DB8D37D65687847D7937B6B;
+			remoteInfo = "litto-mcp";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		1760EA97D135B79DCD3E9F37 /* Embed Dependencies */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 6;
+			files = (
+				897F7F5E5921AD39C57F1CCF /* litto-mcp in Embed Dependencies */,
+			);
+			name = "Embed Dependencies";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		090EBB9BB84DA262F92CADB7 /* Litto.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Litto.entitlements; sourceTree = "<group>"; };
 		160D059DBBA1408502821426 /* StudyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyView.swift; sourceTree = "<group>"; };
 		322E8FD454E2039EC9B07001 /* litto */ = {isa = PBXFileReference; lastKnownFileType = folder; name = litto; path = ../..; sourceTree = SOURCE_ROOT; };
 		3E54C8F604BC88335F25B7ED /* StudySession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySession.swift; sourceTree = "<group>"; };
+		418086DE8E1223E0D53AFA2F /* litto-mcp */ = {isa = PBXFileReference; includeInIndex = 0; path = "litto-mcp"; sourceTree = BUILT_PRODUCTS_DIR; };
 		51E86D681BC1D12393042FEA /* DeckViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckViews.swift; sourceTree = "<group>"; };
 		533338483F7578544D901871 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		55832D2C41F57E2F4816155E /* DeckImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckImporter.swift; sourceTree = "<group>"; };
 		6F65D240A176A142F2B6868D /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		73ECAE238B5A0400D062D688 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		804EE249FEF565173AC78819 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		8C04BC4307A2331B5C727927 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		A3EF449F0110A2B294EA03E9 /* Speech.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Speech.swift; sourceTree = "<group>"; };
 		A7D58F3F434BFEE29FD9B843 /* FolderSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSync.swift; sourceTree = "<group>"; };
@@ -64,6 +94,15 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2CA65F6B0FC1C7BD66F5F31C /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1A5D02B4284A3B8FF99DD5C0 /* LittoCore in Frameworks */,
+				CE53C371636C60EF93645C6F /* MCP in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5855CC6AA4E1DB2C2B73EA62 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -87,6 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				25256F16D651DE792631640D /* iOS */,
+				3F67718BD8EE430B5AE97C74 /* LittoMCP */,
 				528D3EC9436EBC2525AB11BD /* macOS */,
 				2B023303AD9B0D7030BFDBEA /* Packages */,
 				6CAAB29396C8105171C04582 /* Resources */,
@@ -110,6 +150,15 @@
 				322E8FD454E2039EC9B07001 /* litto */,
 			);
 			name = Packages;
+			sourceTree = "<group>";
+		};
+		3F67718BD8EE430B5AE97C74 /* LittoMCP */ = {
+			isa = PBXGroup;
+			children = (
+				804EE249FEF565173AC78819 /* main.swift */,
+			);
+			name = LittoMCP;
+			path = ../../Sources/LittoMCP;
 			sourceTree = "<group>";
 		};
 		528D3EC9436EBC2525AB11BD /* macOS */ = {
@@ -152,6 +201,7 @@
 		B5C474FFD0BEEE578857C573 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				418086DE8E1223E0D53AFA2F /* litto-mcp */,
 				BF554F9C207CE760D020AB9E /* LittoiOS.app */,
 				E0DF7EF0EFC0539F9973E6CF /* LittoMac.app */,
 			);
@@ -161,6 +211,26 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		3DB8D37D65687847D7937B6B /* litto-mcp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8BD79DC1969E86E66AAD5C9C /* Build configuration list for PBXNativeTarget "litto-mcp" */;
+			buildPhases = (
+				CEC95E6612FC1FEFFFBB66A6 /* Sources */,
+				2CA65F6B0FC1C7BD66F5F31C /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "litto-mcp";
+			packageProductDependencies = (
+				69A9B17DD45C55554FC87154 /* LittoCore */,
+				92F789A42CAFB9237D83BFE9 /* MCP */,
+			);
+			productName = "litto-mcp";
+			productReference = 418086DE8E1223E0D53AFA2F /* litto-mcp */;
+			productType = "com.apple.product-type.tool";
+		};
 		6382EF6855B3FC26C5F68FD3 /* LittoMac */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = DEAE1F753B04EF83859A0B8F /* Build configuration list for PBXNativeTarget "LittoMac" */;
@@ -168,10 +238,12 @@
 				7BEC4A99B814592E382DED43 /* Sources */,
 				0A6895515CFD78767CD9229B /* Resources */,
 				E56240811B8BF6BAC5BC48DB /* Frameworks */,
+				1760EA97D135B79DCD3E9F37 /* Embed Dependencies */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A50ECAEC18DF7E4604F4003F /* PBXTargetDependency */,
 			);
 			name = LittoMac;
 			packageProductDependencies = (
@@ -210,6 +282,10 @@
 				BuildIndependentTargetsInParallel = YES;
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
+					3DB8D37D65687847D7937B6B = {
+						DevelopmentTeam = Y76K9N6M4R;
+						ProvisioningStyle = Automatic;
+					};
 					6382EF6855B3FC26C5F68FD3 = {
 						DevelopmentTeam = Y76K9N6M4R;
 						ProvisioningStyle = Automatic;
@@ -230,6 +306,7 @@
 			mainGroup = 01E54041CAAB91A4ED85F7CB;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				B543D04F58730555734F97EB /* XCRemoteSwiftPackageReference "swift-sdk" */,
 				ECA4697DB182D1B1FC053D84 /* XCLocalSwiftPackageReference "../.." */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -238,6 +315,7 @@
 			projectRoot = "";
 			targets = (
 				6382EF6855B3FC26C5F68FD3 /* LittoMac */,
+				3DB8D37D65687847D7937B6B /* litto-mcp */,
 				BC05BEE26C4B569F779D9652 /* LittoiOS */,
 			);
 		};
@@ -285,6 +363,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		CEC95E6612FC1FEFFFBB66A6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DAE1CE92861AD8AFD014520A /* main.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EB31EA246660DED7B1115A4D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -304,6 +390,14 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		A50ECAEC18DF7E4604F4003F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3DB8D37D65687847D7937B6B /* litto-mcp */;
+			targetProxy = 4DA1EDB1123F952281888363 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1F201AE995901BCFDC8053EC /* Release */ = {
@@ -431,6 +525,42 @@
 			};
 			name = Debug;
 		};
+		4B5A29C4935AB849E6DAA0C8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jesuspaz.litto.mcp;
+				PRODUCT_NAME = "litto-mcp";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		94EFA0AF68AA2280A8133E06 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.jesuspaz.litto.mcp;
+				PRODUCT_NAME = "litto-mcp";
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
 		ABA7F61F2FB3A59C23B3CCA9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -533,6 +663,15 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		8BD79DC1969E86E66AAD5C9C /* Build configuration list for PBXNativeTarget "litto-mcp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				94EFA0AF68AA2280A8133E06 /* Debug */,
+				4B5A29C4935AB849E6DAA0C8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		BD82C1C3D4C5632FDA1E04FA /* Build configuration list for PBXNativeTarget "LittoiOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -560,7 +699,27 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		B543D04F58730555734F97EB /* XCRemoteSwiftPackageReference "swift-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/modelcontextprotocol/swift-sdk.git";
+			requirement = {
+				kind = exactVersion;
+				version = 0.12.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		69A9B17DD45C55554FC87154 /* LittoCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LittoCore;
+		};
+		92F789A42CAFB9237D83BFE9 /* MCP */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B543D04F58730555734F97EB /* XCRemoteSwiftPackageReference "swift-sdk" */;
+			productName = MCP;
+		};
 		94C900051D832604D5752567 /* LittoCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LittoCore;
