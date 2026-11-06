@@ -7,13 +7,11 @@ struct RootView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \Deck.name) private var decks: [Deck]
     @State private var selection: PersistentIdentifier?
-    @State private var importing = false
+    @Bindable private var router = AppRouter.shared
     @State private var importError: String?
     @State private var importNote: String?
     @State private var working = false
-    @State private var studyingToday = false
     @State private var showingSettings = false
-    private let reminder = Reminder.shared
 
     var body: some View {
         NavigationSplitView {
@@ -21,7 +19,7 @@ struct RootView: View {
                 List(selection: $selection) {
                     if !decks.isEmpty {
                         Section {
-                            TodayCard(decks: decks, now: timeline.date) { studyingToday = true }
+                            TodayCard(decks: decks, now: timeline.date) { router.startToday = true }
                         }
                     }
                     ForEach(decks) { deck in
@@ -39,7 +37,7 @@ struct RootView: View {
                     } description: {
                         Text("Pídele a Claude que te cree uno, o importa un mazo de Anki (.apkg) o un archivo JSON.")
                     } actions: {
-                        Button("Importar…") { importing = true }
+                        Button("Importar…") { router.importing = true }
                         #if os(macOS)
                         SettingsLink { Text("Conectar Claude…") }
                         #endif
@@ -47,7 +45,7 @@ struct RootView: View {
                 }
             }
             .toolbar {
-                Button("Importar", systemImage: "square.and.arrow.down") { importing = true }
+                Button("Importar", systemImage: "square.and.arrow.down") { router.importing = true }
                     .disabled(working)
                 #if os(iOS)
                 Button("Ajustes", systemImage: "gearshape") { showingSettings = true }
@@ -71,14 +69,14 @@ struct RootView: View {
             if selection == nil { selection = decks.first?.persistentModelID }
             #endif
             #if DEBUG
-            if Demo.step == "today" { studyingToday = true } else if Demo.isOn { selection = decks.first?.persistentModelID }
+            if Demo.step == "today" { router.startToday = true } else if Demo.isOn { selection = decks.first?.persistentModelID }
             #endif
         }
-        .fileImporter(isPresented: $importing, allowedContentTypes: Self.importTypes, allowsMultipleSelection: true) { result in
+        .fileImporter(isPresented: $router.importing, allowedContentTypes: Self.importTypes, allowsMultipleSelection: true) { result in
             Task { await importFiles(result) }
         }
         #if os(iOS)
-        .fullScreenCover(isPresented: $studyingToday) { StudyView(decks: decks, title: "Hoy", context: context) }
+        .fullScreenCover(isPresented: studyingToday) { StudyView(decks: decks, title: String(localized: "Hoy"), context: context) }
         .sheet(isPresented: $showingSettings) {
             NavigationStack {
                 Form { StudySettingsSection() }
@@ -88,14 +86,13 @@ struct RootView: View {
             }
         }
         #else
-        .sheet(isPresented: $studyingToday) {
-            StudyView(decks: decks, title: "Hoy", context: context).frame(minWidth: 600, minHeight: 620)
+        .sheet(isPresented: studyingToday) {
+            StudyView(decks: decks, title: String(localized: "Hoy"), context: context).frame(minWidth: 600, minHeight: 620)
         }
         #endif
-        .onChange(of: reminder.startRequested, initial: true) { _, requested in
-            guard requested else { return }
-            reminder.startRequested = false
-            if !decks.isEmpty { studyingToday = true }
+        .onChange(of: router.studySelectedDeck) { _, requested in
+            // Nothing selected: nobody else will take the request.
+            if requested && selection == nil { router.studySelectedDeck = false }
         }
         .alert("Importado", isPresented: Binding(get: { importNote != nil }, set: { if !$0 { importNote = nil } })) {
             Button("OK", role: .cancel) {}
@@ -107,6 +104,11 @@ struct RootView: View {
         } message: {
             Text(importError ?? "")
         }
+    }
+
+    /// Today's session is open while there are decks to study.
+    private var studyingToday: Binding<Bool> {
+        Binding { router.startToday && !decks.isEmpty } set: { router.startToday = $0 }
     }
 
     private func delete(_ deck: Deck) {
@@ -173,8 +175,8 @@ struct RootView: View {
         FolderSync.shared.scan()
         #endif
         let cards = result.decks.reduce(0) { $0 + $1.cards.count }
-        var note = "\(url.lastPathComponent): \(result.decks.count == 1 ? "1 mazo" : "\(result.decks.count) mazos"), \(cards) tarjetas."
-        if result.skipped > 0 { note += " \(result.skipped) notas sin frente o reverso no se importaron." }
+        var note = String(localized: "\(url.lastPathComponent): \(result.decks.count) mazos, \(cards) tarjetas.")
+        if result.skipped > 0 { note += " " + String(localized: "\(result.skipped) notas sin frente o reverso no se importaron.") }
         return note
     }
 }
@@ -209,6 +211,7 @@ struct DeckDetailView: View {
     @State private var inspected: StudyCard?
     @AppStorage("autoSpeak") private var autoSpeak = true
     @AppStorage(StudySettings.sessionMinutesKey) private var minutes = StudySettings.defaultMinutes
+    @Bindable private var router = AppRouter.shared
 
     var body: some View {
         TimelineView(.everyMinute) { timeline in
@@ -251,6 +254,11 @@ struct DeckDetailView: View {
         .confirmationDialog("¿Eliminar «\(deck.name)» y todo su progreso?", isPresented: $confirmDelete, titleVisibility: .visible) {
             Button("Eliminar", role: .destructive, action: onDelete)
         }
+        .onChange(of: router.studySelectedDeck) { _, requested in
+            guard requested else { return }
+            router.studySelectedDeck = false
+            if deck.counts().total > 0 { studying = true }
+        }
         .sheet(item: $inspected) { card in
             CardDetailView(card: card, language: deck.language)
         }
@@ -284,7 +292,6 @@ struct DeckDetailView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.roundedRectangle(radius: 12))
-                .keyboardShortcut(.return, modifiers: .command)
             } else {
                 Label {
                     if let next = deck.nextDue(after: now) {
@@ -303,7 +310,7 @@ struct DeckDetailView: View {
         .padding(.vertical, 8)
     }
 
-    private func stat(_ title: String, _ value: Int, _ color: Color) -> some View {
+    private func stat(_ title: LocalizedStringKey, _ value: Int, _ color: Color) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text("\(value)")
                 .font(.title.weight(.semibold))

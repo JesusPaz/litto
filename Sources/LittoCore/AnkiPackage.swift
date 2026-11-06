@@ -82,7 +82,7 @@ public enum AnkiPackage {
             guard let cards = notesByDeck[name], !cards.isEmpty else { return nil }
             let slug = DeckFile.slug(name)
             return DeckFile(id: slug.isEmpty ? "anki-\(index + 1)" : String("anki-\(slug)".prefix(80)), name: name,
-                            description: "Importado de Anki.", language: language(of: cards.map(\.front)), cards: cards)
+                            language: language(of: cards.map(\.front)), cards: cards)
         }
         guard !decks.isEmpty else { throw ImportError(description: "the package has no cards Litto can use") }
         return Result(decks: decks, skipped: skipped)

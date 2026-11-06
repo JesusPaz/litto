@@ -70,6 +70,14 @@ struct StudyView: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 12)
                 .frame(maxWidth: LittoStyle.readableWidth)
+            #if os(macOS)
+            Text(session.showingAnswer
+                 ? "1–4 responder · S escuchar · E ejemplo · D diccionario · ⌘Z deshacer · Esc cerrar"
+                 : "Espacio mostrar respuesta · S escuchar · ⌘Z deshacer · Esc cerrar")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .padding(.bottom, 12)
+            #endif
         }
     }
 
@@ -93,6 +101,7 @@ struct StudyView: View {
                 .font(.title3)
                 .frame(minWidth: LittoStyle.minTarget, minHeight: LittoStyle.minTarget)
                 .keyboardShortcut("s", modifiers: [])
+                .focusable(false) // Space must reveal the answer, not press this button.
                 .disabled(session.language(of: card).isEmpty)
             }
 
@@ -134,6 +143,8 @@ struct StudyView: View {
                         }
                         .labelStyle(.iconOnly)
                         .buttonStyle(.borderless)
+                        .keyboardShortcut("e", modifiers: [])
+                        .focusable(false)
                         .disabled(session.language(of: card).isEmpty)
                     }
                     if !card.exampleTranslation.isEmpty {
@@ -152,6 +163,8 @@ struct StudyView: View {
             }
             DictionaryButton(term: card.front)
                 .font(.callout)
+                .keyboardShortcut("d", modifiers: [])
+                .focusable(false)
         }
     }
 
@@ -175,6 +188,7 @@ struct StudyView: View {
                     .buttonBorderShape(.roundedRectangle(radius: 12))
                     .tint(grade.color)
                     .keyboardShortcut(KeyEquivalent(Character("\(grade.rawValue)")), modifiers: [])
+                    .focusable(false) // Otherwise Space could press the last grade again.
                     .accessibilityLabel("\(grade.title), vuelve en \(intervals[grade] ?? "")")
                 }
             }
@@ -189,6 +203,7 @@ struct StudyView: View {
             .buttonStyle(.borderedProminent)
             .buttonBorderShape(.roundedRectangle(radius: 12))
             .keyboardShortcut(.space, modifiers: [])
+            .focusable(false)
         }
     }
 
@@ -212,14 +227,16 @@ struct StudyView: View {
                 .keyboardShortcut(.defaultAction)
             if timeUp && left.counts.total > 0 {
                 Button("5 minutos más") { session.extend() }
+                    .keyboardShortcut("5", modifiers: [])
             }
         }
     }
 
     private var summary: String {
         let minutes = Minutes.text(session.elapsed())
-        let new = session.newCount > 0 ? ", \(session.newCount) nuevas" : ""
-        return "\(minutes) · \(session.reviewedCount) respuestas\(new)."
+        return session.newCount > 0
+            ? String(localized: "\(minutes) · \(session.reviewedCount) respuestas, \(session.newCount) nuevas.")
+            : String(localized: "\(minutes) · \(session.reviewedCount) respuestas.")
     }
 
     private func reveal() {

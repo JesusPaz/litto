@@ -15,8 +15,6 @@ final class Reminder: NSObject, UNUserNotificationCenterDelegate {
     static let defaultTime: Double = 19 * 3600
     private static let id = "daily-session"
 
-    /// Set when the user taps the notification; the root view starts the session and clears it.
-    var startRequested = false
     private(set) var denied = false
 
     func activate() {
@@ -32,8 +30,8 @@ final class Reminder: NSObject, UNUserNotificationCenterDelegate {
         denied = !granted
         guard granted else { return }
         let content = UNMutableNotificationContent()
-        content.title = minutes > 0 ? "Tu repaso de \(minutes) minutos" : "Tu repaso de hoy"
-        content.body = "Las palabras que tocan hoy y unas cuantas nuevas."
+        content.title = minutes > 0 ? String(localized: "Tu repaso de \(minutes) minutos") : String(localized: "Tu repaso de hoy")
+        content.body = String(localized: "Las palabras que tocan hoy y unas cuantas nuevas.")
         content.sound = .default
         var when = DateComponents()
         when.hour = Int(time) / 3600
@@ -44,7 +42,7 @@ final class Reminder: NSObject, UNUserNotificationCenterDelegate {
     }
 
     nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
-        await MainActor.run { startRequested = true }
+        await MainActor.run { AppRouter.shared.startToday = true }
     }
 
     nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
@@ -100,7 +98,7 @@ struct TodayCard: View {
     let now: Date
     var onStart: () -> Void
     @AppStorage(StudySettings.sessionMinutesKey) private var minutes = StudySettings.defaultMinutes
-    @State private var showingWords = false
+    @Bindable private var router = AppRouter.shared
 
     var body: some View {
         let pile = DuePile(decks: decks, now: now)
@@ -123,19 +121,19 @@ struct TodayCard: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.roundedRectangle(radius: 12))
-                Button("Ver palabras de hoy") { showingWords = true }
+                Button("Ver palabras de hoy") { router.showTodayWords = true }
                     .buttonStyle(.borderless)
                     .font(.subheadline)
             }
         }
         .padding(.vertical, 8)
-        .sheet(isPresented: $showingWords) { PendingWordsView(pile: pile) }
+        .sheet(isPresented: $router.showTodayWords) { PendingWordsView(pile: pile) }
     }
 
     private func detail(estimate: TimeInterval) -> String {
-        let all = "Pendiente: \(Minutes.text(estimate))."
-        guard minutes > 0, estimate > TimeInterval(minutes * 60) else { return all }
-        return all + " Hoy \(minutes); el resto, otro día."
+        let total = Minutes.text(estimate)
+        guard minutes > 0, estimate > TimeInterval(minutes * 60) else { return String(localized: "Pendiente: \(total).") }
+        return String(localized: "Pendiente: \(total). Hoy \(minutes) min; el resto, otro día.")
     }
 }
 
@@ -170,10 +168,12 @@ struct PendingWordsView: View {
     }
 
     @ViewBuilder
-    private func section(_ title: String, _ cards: [StudyCard], now: Date) -> some View {
+    private func section(_ title: LocalizedStringKey, _ cards: [StudyCard], now: Date) -> some View {
         if !cards.isEmpty {
-            Section("\(title) · \(cards.count)") {
+            Section {
                 ForEach(cards) { card in CardRow(card: card, now: now) }
+            } header: {
+                Text(title) + Text(verbatim: " · \(cards.count)")
             }
         }
     }

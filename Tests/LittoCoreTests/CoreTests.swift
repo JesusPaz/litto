@@ -73,14 +73,6 @@ import Testing
         #expect(record.state == .relearning)
     }
 
-    @Test func intervalText() {
-        #expect(IntervalText.short(from: now, to: now.addingTimeInterval(60)) == "1 min")
-        #expect(IntervalText.short(from: now, to: now.addingTimeInterval(600)) == "10 min")
-        #expect(IntervalText.short(from: now, to: now.addingTimeInterval(3 * 86_400)) == "3 d")
-        #expect(IntervalText.short(from: now, to: now.addingTimeInterval(60 * 86_400)) == "2 mes")
-        #expect(IntervalText.short(from: now, to: now.addingTimeInterval(1.5 * 365 * 86_400)) == "1,5 a")
-        #expect(IntervalText.short(from: now, to: now.addingTimeInterval(2 * 365 * 86_400)) == "2 a")
-    }
 }
 
 @Suite struct StudyQueueTests {

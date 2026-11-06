@@ -22,8 +22,30 @@ struct LittoApp: App {
             if phase == .active { FolderSync.shared.scan() } else { FolderSync.shared.exportProgress() }
         }
 
+        .commands { LittoCommands() }
+
         Settings {
             SettingsView()
+        }
+    }
+}
+
+/// Everything is reachable from the keyboard.
+struct LittoCommands: Commands {
+    private let router = AppRouter.shared
+
+    var body: some Commands {
+        CommandGroup(replacing: .newItem) {
+            Button("Importar…") { router.importing = true }
+                .keyboardShortcut("o")
+        }
+        CommandMenu("Estudio") {
+            Button("Empezar repaso de hoy") { router.startToday = true }
+                .keyboardShortcut(.return, modifiers: .command)
+            Button("Estudiar el mazo elegido") { router.studySelectedDeck = true }
+                .keyboardShortcut(.return, modifiers: [.command, .shift])
+            Button("Ver palabras de hoy") { router.showTodayWords = true }
+                .keyboardShortcut("l")
         }
     }
 }

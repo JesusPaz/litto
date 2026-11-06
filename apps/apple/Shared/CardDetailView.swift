@@ -115,7 +115,7 @@ struct CardDetailView: View {
             card.imageSource = "user"
             try context.save()
         } catch {
-            imageError = "No se pudo usar esa imagen."
+            imageError = String(localized: "No se pudo usar esa imagen.")
         }
     }
 }

@@ -4,7 +4,7 @@ Spaced-repetition flashcards for iPhone and Mac, with decks written by Claude.
 
 Native SwiftUI apps, FSRS-6 scheduling, iCloud sync, and an MCP server so Claude can build your vocabulary decks, fix cards, and see which words you keep forgetting.
 
-**Personal beta.** The interface is in Spanish for now.
+**Personal beta.** The interface is in Spanish and English and follows the system language; on the Mac you can pick one for Litto alone in System Settings › General › Language & Region › Applications.
 
 ## What it does
 
@@ -15,6 +15,21 @@ Native SwiftUI apps, FSRS-6 scheduling, iCloud sync, and an MCP server so Claude
 - **Pronunciation with Apple voices**, offline. Litto picks the best installed voice (Premium, then Enhanced). The system dictionary is one tap away.
 - **SwiftUI + SwiftData**, synced between iPhone and Mac through your private iCloud database.
 - **MCP server** (`litto-mcp`) for Claude.
+
+## Keyboard (Mac)
+
+| Keys | Action |
+|---|---|
+| ⌘↩ | Start today's session |
+| ⇧⌘↩ | Study the selected deck |
+| ⌘L | Today's words |
+| ⌘O | Import an Anki deck or JSON |
+| Space | Show the answer |
+| 1 2 3 4 | Again, Hard, Good, Easy |
+| S / E / D | Hear the word / hear the example / open the dictionary |
+| ⌘Z | Undo the last answer |
+| 5 | Five more minutes, when the time is up |
+| Esc | Close the session |
 
 ## How it fits together
 
@@ -94,6 +109,8 @@ open apps/apple/Litto.xcodeproj              # schemes LittoMac and LittoiOS
 Unsigned builds keep everything local; iCloud sync needs signing with team `Y76K9N6M4R` and the `iCloud.com.jesuspaz.litto` container.
 
 `LITTO_HOME` moves the shared folder (useful for tests). In DEBUG builds, `LITTO_SEED=<deck.json>` and `LITTO_DEMO=deck|card|study|answer` open screens in the simulator without UI automation.
+
+Adding a language: open `apps/apple/Resources/Localizable.xcstrings` in Xcode, add the language and translate; Spanish is the source. Plurals are handled per language there.
 
 Design notes: [design.md](design.md). Releasing: [docs/release.md](docs/release.md).
 

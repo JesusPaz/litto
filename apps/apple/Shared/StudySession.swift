@@ -118,7 +118,7 @@ final class StudySession {
     func intervals() -> [Grade: String] {
         guard let current else { return [:] }
         let now = Date()
-        return scheduler.preview(current.memory, at: now).mapValues { IntervalText.short(from: now, to: $0) }
+        return scheduler.preview(current.memory, at: now).mapValues { Interval.short(from: now, to: $0) }
     }
 
     func answer(_ grade: Grade) {
