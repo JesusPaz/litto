@@ -69,13 +69,15 @@ Deck format:
 
 ## Install
 
-Download the notarized Mac app from [Releases](https://github.com/JesusPaz/litto/releases). The iPhone app ships through TestFlight.
+Download the notarized Mac app from [Releases](https://github.com/JesusPaz/litto/releases) and move it to Applications. The iPhone app ships through TestFlight.
 
-Register the MCP server with Claude Code (requires Xcode 26+):
+The MCP server ships inside the Mac app. Connect it to Claude Code once:
 
 ```sh
-./scripts/install-mcp.sh
+claude mcp add --scope user litto -- /Applications/Litto.app/Contents/MacOS/litto-mcp
 ```
+
+Litto › Settings shows the same command with a copy button. To run the server from source instead: `./scripts/install-mcp.sh`.
 
 ## Develop
 
@@ -90,7 +92,7 @@ Unsigned builds keep everything local; iCloud sync needs signing with team `Y76K
 
 `LITTO_HOME` moves the shared folder (useful for tests). In DEBUG builds, `LITTO_SEED=<deck.json>` and `LITTO_DEMO=deck|card|study|answer` open screens in the simulator without UI automation.
 
-Design notes: [design.md](design.md).
+Design notes: [design.md](design.md). Releasing: [docs/release.md](docs/release.md).
 
 ## License
 

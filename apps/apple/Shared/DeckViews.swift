@@ -29,6 +29,9 @@ struct RootView: View {
                         Text("Pídele a Claude que te cree uno, o importa un archivo JSON.")
                     } actions: {
                         Button("Importar…") { importing = true }
+                        #if os(macOS)
+                        SettingsLink { Text("Conectar Claude…") }
+                        #endif
                     }
                 }
             }

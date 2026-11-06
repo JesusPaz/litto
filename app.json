@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "Litto",
+    "slug": "litto",
+    "owner": "jesuspazs-team",
+    "extra": {
+      "eas": {
+        "projectId": "cbf2eaf9-e8c6-4900-912e-a650ea8456b0"
+      }
+    }
+  }
+}
