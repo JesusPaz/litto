@@ -16,6 +16,9 @@ useful, and a short definition in the language being learned. Add an image only 
 can read it aloud. Card ids are stable keys: reuse an id to correct a card without losing its \
 review progress; never reuse an id for a different word.
 
+To bring in an existing Anki deck, call import_anki with the path to the .apkg file; the \
+imported cards can then be improved like any other (add examples, definitions, images).
+
 Use get_progress to see which cards the learner struggles with, then reinforce them (better \
 examples, mnemonics in notes, related cards) instead of guessing.
 """
@@ -74,6 +77,8 @@ let tools = [
     Tool(name: "get_progress", description: "Study progress exported by the Mac app: per-deck counts and the cards the learner struggles with (or all cards).",
          inputSchema: schema(["deck_id": deckID, "all_cards": .object(["type": "boolean", "description": "Include every card, not only struggling ones."])], required: []),
          annotations: .init(readOnlyHint: true)),
+    Tool(name: "import_anki", description: "Import an Anki package (.apkg or .colpkg, any Anki version) into Litto decks: one card per note, fields matched by name, HTML stripped, first image kept, cards start as new. Re-importing updates the same cards.",
+         inputSchema: schema(["path": .object(["type": "string", "description": "Absolute path to the .apkg file."])], required: ["path"])),
 ]
 
 struct ToolError: Error, CustomStringConvertible { let description: String }
@@ -109,6 +114,7 @@ struct Arguments: Decodable, Sendable {
     var card_id: String?
     var image: String?
     var all_cards: Bool?
+    var path: String?
 
     func requireDeckID() throws -> String {
         guard let deck_id, !deck_id.isEmpty else { throw ToolError(description: "deck_id is required") }
@@ -218,6 +224,25 @@ func run(_ name: String, _ args: Arguments, original: Arguments) throws -> Strin
             for i in snapshot.decks.indices { snapshot.decks[i].cards = snapshot.decks[i].cards.filter(\.isStruggling) }
         }
         return try json(snapshot)
+
+    case "import_anki":
+        guard let path = args.path, !path.isEmpty else { throw ToolError(description: "path is required") }
+        let url = URL(fileURLWithPath: (path as NSString).expandingTildeInPath)
+        let result = try AnkiPackage.read(url, media: library.media)
+        var lines: [String] = []
+        for deck in result.decks {
+            var file = deck
+            if library.exists(deck.id) {
+                file = try library.load(deck.id)
+                let (added, updated) = file.upsert(deck.cards)
+                lines.append("\(deck.id): \(added) added, \(updated) updated")
+            } else {
+                lines.append("\(deck.id): \(deck.cards.count) cards (\(deck.name), language \(deck.language ?? "unknown"))")
+            }
+            try library.save(file)
+        }
+        if result.skipped > 0 { lines.append("\(result.skipped) notes skipped (no usable front and back)") }
+        return lines.joined(separator: "\n")
 
     default:
         throw ToolError(description: "unknown tool \(name)")

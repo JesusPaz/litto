@@ -20,6 +20,30 @@ enum LittoStyle {
     static let minTarget: CGFloat = 44
 }
 
+/// Durations the way people say them: "8 min", "1 h 20 min", "menos de 1 min".
+enum Minutes {
+    static func text(_ seconds: TimeInterval) -> String {
+        let minutes = Int((seconds / 60).rounded())
+        if minutes < 1 { return String(localized: "menos de 1 min") }
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute]
+        formatter.unitsStyle = .short
+        return formatter.string(from: TimeInterval(minutes * 60)) ?? "\(minutes) min"
+    }
+}
+
+/// When a card comes back, short and in the app's language: "10 min", "3 d", "2 mo".
+enum Interval {
+    static func short(from now: Date, to due: Date) -> String {
+        let seconds = max(60, due.timeIntervalSince(now))
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .abbreviated
+        formatter.maximumUnitCount = 1
+        formatter.allowedUnits = seconds < 3600 ? [.minute] : seconds < 86400 ? [.hour] : seconds < 30 * 86400 ? [.day] : seconds < 365 * 86400 ? [.month] : [.year]
+        return formatter.string(from: seconds) ?? ""
+    }
+}
+
 /// "4 nuevas · 0 aprendiendo · 2 repasar", colored but always readable as text.
 struct CountsLine: View {
     let counts: QueueCounts
@@ -34,7 +58,7 @@ struct CountsLine: View {
         .accessibilityElement(children: .combine)
     }
 
-    private func item(_ value: Int, _ label: String, _ color: Color) -> some View {
+    private func item(_ value: Int, _ label: LocalizedStringKey, _ color: Color) -> some View {
         HStack(spacing: 4) {
             Text("\(value)").monospacedDigit().fontWeight(.semibold).foregroundStyle(value > 0 ? color : .secondary)
             Text(label).foregroundStyle(.secondary)
@@ -53,7 +77,7 @@ struct StateLabel: View {
         case .learning, .relearning:
             Text("Aprendiendo").foregroundStyle(LittoStyle.learning)
         case .review:
-            Text(card.due <= now ? "Hoy" : "En \(IntervalText.short(from: now, to: card.due))")
+            Text(card.due <= now ? "Hoy" : "En \(Interval.short(from: now, to: card.due))")
                 .foregroundStyle(.secondary)
         }
     }
@@ -90,10 +114,10 @@ extension Image {
 extension Grade {
     var title: String {
         switch self {
-        case .again: "Otra vez"
-        case .hard: "Difícil"
-        case .good: "Bien"
-        case .easy: "Fácil"
+        case .again: String(localized: "Otra vez")
+        case .hard: String(localized: "Difícil")
+        case .good: String(localized: "Bien")
+        case .easy: String(localized: "Fácil")
         }
     }
 

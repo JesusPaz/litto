@@ -88,20 +88,3 @@ public struct Scheduler: Sendable {
         return out
     }
 }
-
-public enum IntervalText {
-    /// "1 min", "10 min", "3 h", "4 d", "2 mes", "1,5 a".
-    public static func short(from now: Date, to due: Date) -> String {
-        let seconds = max(0, due.timeIntervalSince(now))
-        let minutes = seconds / 60
-        if minutes < 60 { return "\(max(1, Int(minutes.rounded()))) min" }
-        let hours = minutes / 60
-        if hours < 24 { return "\(Int(hours.rounded())) h" }
-        let days = hours / 24
-        if days < 30 { return "\(Int(days.rounded())) d" }
-        if days < 365 { return "\(Int((days / 30).rounded())) mes" }
-        let years = days / 365
-        let formatted = years < 10 ? String(format: "%.1f", years).replacingOccurrences(of: ".", with: ",") : "\(Int(years.rounded()))"
-        return "\(formatted.replacingOccurrences(of: ",0", with: "")) a"
-    }
-}

@@ -73,14 +73,6 @@ import Testing
         #expect(record.state == .relearning)
     }
 
-    @Test func intervalText() {
-        #expect(IntervalText.short(from: now, to: now.addingTimeInterval(60)) == "1 min")
-        #expect(IntervalText.short(from: now, to: now.addingTimeInterval(600)) == "10 min")
-        #expect(IntervalText.short(from: now, to: now.addingTimeInterval(3 * 86_400)) == "3 d")
-        #expect(IntervalText.short(from: now, to: now.addingTimeInterval(60 * 86_400)) == "2 mes")
-        #expect(IntervalText.short(from: now, to: now.addingTimeInterval(1.5 * 365 * 86_400)) == "1,5 a")
-        #expect(IntervalText.short(from: now, to: now.addingTimeInterval(2 * 365 * 86_400)) == "2 a")
-    }
 }
 
 @Suite struct StudyQueueTests {
@@ -183,5 +175,101 @@ import Testing
     @Test func deckRejectsBadImageNames() {
         let deck = DeckFile(id: "en", name: "Inglés", cards: [CardFile(id: "a", front: "dog", back: "perro", image: "../../etc/passwd")])
         #expect(throws: DeckValidationError.self) { try deck.validate() }
+    }
+}
+
+@Suite struct SessionPlannerTests {
+    @Test func backlogLeavesNoRoomForNewCards() {
+        let backlog = QueueCounts(new: 20, learning: 0, review: 200)
+        #expect(SessionPlanner.newCards(backlog, limit: 600, secondsPerAnswer: 10) == 0)
+        #expect(SessionPlanner.estimate(backlog, secondsPerAnswer: 10) == 2600)
+    }
+
+    @Test func newCardsFillTheTimeReviewsLeave() {
+        let light = QueueCounts(new: 20, learning: 0, review: 30)
+        // 600 s − 300 s of reviews = 300 s, at 30 s per new card.
+        #expect(SessionPlanner.newCards(light, limit: 600, secondsPerAnswer: 10) == 10)
+        #expect(SessionPlanner.newCards(light, limit: nil, secondsPerAnswer: 10) == 20)
+    }
+
+    @Test func newCardsAreSpreadAmongReviews() {
+        #expect(!SessionPlanner.newIsDue(reviewsSinceNew: 3, plannedNew: 5, introduced: 0, reviews: 20))
+        #expect(SessionPlanner.newIsDue(reviewsSinceNew: 4, plannedNew: 5, introduced: 0, reviews: 20))
+        #expect(SessionPlanner.newIsDue(reviewsSinceNew: 0, plannedNew: 5, introduced: 1, reviews: 0), "no reviews left")
+        #expect(!SessionPlanner.newIsDue(reviewsSinceNew: 9, plannedNew: 5, introduced: 5, reviews: 20), "plan used up")
+    }
+
+    @Test func preferNewJumpsAheadOfReviewsButNotDueLearning() {
+        let now = Date()
+        var items = [
+            QueueItem(id: "new", state: .new, due: now, order: 0),
+            QueueItem(id: "review", state: .review, due: now, order: 0),
+        ]
+        #expect(StudyQueue.next(items, newAllowance: 1, now: now, preferNew: true) == "new")
+        items.append(QueueItem(id: "learning", state: .learning, due: now.addingTimeInterval(-60), order: 0))
+        #expect(StudyQueue.next(items, newAllowance: 1, now: now, preferNew: true) == "learning")
+    }
+
+    @Test func paceAdaptsSlowly() {
+        #expect(SessionPlanner.updatedPace(10, sessionSeconds: 600, answers: 30) == 13)
+        #expect(SessionPlanner.updatedPace(10, sessionSeconds: 600, answers: 2) == 10, "too few answers to tell")
+    }
+}
+
+@Suite struct TreeTests {
+    var calendar: Calendar = {
+        var c = Calendar(identifier: .gregorian)
+        c.timeZone = TimeZone(identifier: "America/Bogota")!
+        return c
+    }()
+
+    func day(_ n: Int) -> Date {
+        StudyDay.start(of: calendar.date(from: DateComponents(year: 2026, month: 1, day: 1, hour: 12))!.addingTimeInterval(Double(n) * 86400), calendar: calendar)
+    }
+
+    func days(_ range: some Sequence<Int>, answers: Int = 20) -> [Date: Int] {
+        Dictionary(uniqueKeysWithValues: range.map { (day($0), answers) })
+    }
+
+    @Test func aSeedBeforeStudying() {
+        let tree = Tree.grow(answersByDay: [:], now: day(0), calendar: calendar)
+        #expect(tree.stage == .seed)
+        #expect(tree.health == .healthy)
+        #expect(tree.nextDayMultiplier == 1)
+    }
+
+    @Test func streaksGrowFaster() {
+        let daily = Tree.grow(answersByDay: days(0..<30), now: day(29), calendar: calendar)
+        let everyOther = Tree.grow(answersByDay: days(stride(from: 0, to: 60, by: 2)), now: day(58), calendar: calendar)
+        #expect(daily.studyDays == 30 && everyOther.studyDays == 30)
+        #expect(daily.growth > everyOther.growth * 1.4)
+        #expect(daily.streak == 30 && daily.studiedToday)
+        #expect(daily.rings == 4)
+        #expect((2...4).contains(daily.heightMeters), "about 3 m after a month")
+    }
+
+    @Test func shortDaysDoNotCount() {
+        let tree = Tree.grow(answersByDay: [day(0): 9], now: day(0), calendar: calendar)
+        #expect(tree.studyDays == 0)
+    }
+
+    @Test func driesWhileAwayButNeverShrinks() {
+        let studied = days(0..<10)
+        let before = Tree.grow(answersByDay: studied, now: day(10), calendar: calendar)
+        #expect(before.health == .healthy && before.streak == 10, "the streak survives the next day")
+        let thirsty = Tree.grow(answersByDay: studied, now: day(11), calendar: calendar)
+        #expect(thirsty.health == .thirsty && thirsty.streak == 0)
+        #expect(Tree.grow(answersByDay: studied, now: day(14), calendar: calendar).health == .drying)
+        let dry = Tree.grow(answersByDay: studied, now: day(30), calendar: calendar)
+        #expect(dry.health == .dry)
+        #expect(dry.growth == before.growth)
+        let back = Tree.grow(answersByDay: studied.merging([day(30): 15]) { $1 }, now: day(30), calendar: calendar)
+        #expect(back.health == .healthy && back.streak == 1)
+    }
+
+    @Test func becomesAGiantAfterYears() {
+        let tree = Tree.grow(answersByDay: days(0..<(3 * 365)), now: day(3 * 365 - 1), calendar: calendar)
+        #expect(tree.stage == .giant)
+        #expect(tree.heightMeters < Tree.maxHeight)
     }
 }

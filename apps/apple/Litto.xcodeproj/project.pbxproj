@@ -11,12 +11,14 @@
 		0CC144151C09BD45F748889E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 73ECAE238B5A0400D062D688 /* PrivacyInfo.xcprivacy */; };
 		140C5FE905F89B94E1E69D8B /* LittoCore in Frameworks */ = {isa = PBXBuildFile; productRef = B8C7D97BCB55E7FEC156A6A0 /* LittoCore */; };
 		1A5D02B4284A3B8FF99DD5C0 /* LittoCore in Frameworks */ = {isa = PBXBuildFile; productRef = 69A9B17DD45C55554FC87154 /* LittoCore */; };
+		1EDE8F2FAB12F6A4884FD10B /* Today.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12047D28AB463DBBF515D544 /* Today.swift */; };
 		282445A1A9E90B24707BC509 /* LittoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C0E1D5C323532B5CDD948B /* LittoApp.swift */; };
 		29AA405E14D439D92C73ABE7 /* LittoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B38F8F5765A0AA023B86CD09 /* LittoApp.swift */; };
 		29B5C65757B2E6FDB2C908C7 /* DeckViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E86D681BC1D12393042FEA /* DeckViews.swift */; };
 		3062FAE063B6052344243717 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 73ECAE238B5A0400D062D688 /* PrivacyInfo.xcprivacy */; };
 		3C8A4640F1C2183B61677E95 /* StudyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D059DBBA1408502821426 /* StudyView.swift */; };
 		43434355DB9A8F6A1EEB7D84 /* StudyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160D059DBBA1408502821426 /* StudyView.swift */; };
+		4ECAD2919AA1029352B1ECE7 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BFBE067FC20F3E9AA5638A /* AppRouter.swift */; };
 		4F4E9EAA99961AB2D68496AF /* CardDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC1D094A77FDFB245DC2BDE2 /* CardDetailView.swift */; };
 		5197931FE51D0FE68D413334 /* Speech.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EF449F0110A2B294EA03E9 /* Speech.swift */; };
 		593272E070161B045ECA2363 /* Demo.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7BC6AC191FD026F5D67A0E1 /* Demo.swift */; };
@@ -26,11 +28,17 @@
 		74C13F22EECC0BEF221E3D9C /* LittoCore in Frameworks */ = {isa = PBXBuildFile; productRef = 94C900051D832604D5752567 /* LittoCore */; };
 		82E04297155F25696E731F34 /* LittoStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8F737EA79DD2DC15F47014D /* LittoStyle.swift */; };
 		897F7F5E5921AD39C57F1CCF /* litto-mcp in Embed Dependencies */ = {isa = PBXBuildFile; fileRef = 418086DE8E1223E0D53AFA2F /* litto-mcp */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		8AB6E704F047913F3C2F649A /* TreeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22496D8DDF8CEFEC8E58AB40 /* TreeViews.swift */; };
+		8E243824644769CDA095C35B /* Today.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12047D28AB463DBBF515D544 /* Today.swift */; };
 		8E966F4ED542FFA50B66FA7C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E12D95EB293DCE6F8083912C /* Assets.xcassets */; };
+		9268B2FFA3DFCA3C59F7DB46 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 57F84AC6496B124D8327E8D0 /* Localizable.xcstrings */; };
+		9435B4AC5668BD977917166B /* TreeViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22496D8DDF8CEFEC8E58AB40 /* TreeViews.swift */; };
 		95F0F65230553ED6C0AE5F1A /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F65D240A176A142F2B6868D /* Store.swift */; };
 		9745FB3DB8F0306B1218211A /* StudySession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E54C8F604BC88335F25B7ED /* StudySession.swift */; };
 		A6E8200E52DCD9F3CEE8649B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533338483F7578544D901871 /* SettingsView.swift */; };
 		B000C7BAEB43F3F35BC8125C /* FolderSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D58F3F434BFEE29FD9B843 /* FolderSync.swift */; };
+		B09A98F4C1A92169FC20D87F /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 57F84AC6496B124D8327E8D0 /* Localizable.xcstrings */; };
+		B1555048B9534C0BFCDF0A20 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BFBE067FC20F3E9AA5638A /* AppRouter.swift */; };
 		B34F0E99113A60963552082E /* DeckViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51E86D681BC1D12393042FEA /* DeckViews.swift */; };
 		C8A33ED8361DECAF68824929 /* DeckImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55832D2C41F57E2F4816155E /* DeckImporter.swift */; };
 		CA2B4DCC1D6A7EE0B7BD48FE /* Speech.swift in Sources */ = {isa = PBXBuildFile; fileRef = A3EF449F0110A2B294EA03E9 /* Speech.swift */; };
@@ -69,17 +77,21 @@
 
 /* Begin PBXFileReference section */
 		090EBB9BB84DA262F92CADB7 /* Litto.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Litto.entitlements; sourceTree = "<group>"; };
+		12047D28AB463DBBF515D544 /* Today.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Today.swift; sourceTree = "<group>"; };
 		160D059DBBA1408502821426 /* StudyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyView.swift; sourceTree = "<group>"; };
-		322E8FD454E2039EC9B07001 /* litto */ = {isa = PBXFileReference; lastKnownFileType = folder; name = litto; path = ../..; sourceTree = SOURCE_ROOT; };
+		22496D8DDF8CEFEC8E58AB40 /* TreeViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TreeViews.swift; sourceTree = "<group>"; };
 		3E54C8F604BC88335F25B7ED /* StudySession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudySession.swift; sourceTree = "<group>"; };
 		418086DE8E1223E0D53AFA2F /* litto-mcp */ = {isa = PBXFileReference; includeInIndex = 0; path = "litto-mcp"; sourceTree = BUILT_PRODUCTS_DIR; };
 		51E86D681BC1D12393042FEA /* DeckViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckViews.swift; sourceTree = "<group>"; };
 		533338483F7578544D901871 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		55832D2C41F57E2F4816155E /* DeckImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeckImporter.swift; sourceTree = "<group>"; };
+		57F84AC6496B124D8327E8D0 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		6F65D240A176A142F2B6868D /* Store.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Store.swift; sourceTree = "<group>"; };
 		73ECAE238B5A0400D062D688 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		76BFBE067FC20F3E9AA5638A /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppRouter.swift; sourceTree = "<group>"; };
 		804EE249FEF565173AC78819 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		8C04BC4307A2331B5C727927 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		9D6B9AF24D1FE53EC242FA69 /* litto-sessions */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "litto-sessions"; path = ../..; sourceTree = SOURCE_ROOT; };
 		A3EF449F0110A2B294EA03E9 /* Speech.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Speech.swift; sourceTree = "<group>"; };
 		A7D58F3F434BFEE29FD9B843 /* FolderSync.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSync.swift; sourceTree = "<group>"; };
 		AC2E51271D206A511ACB32E9 /* Litto.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Litto.entitlements; sourceTree = "<group>"; };
@@ -147,7 +159,7 @@
 		2B023303AD9B0D7030BFDBEA /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				322E8FD454E2039EC9B07001 /* litto */,
+				9D6B9AF24D1FE53EC242FA69 /* litto-sessions */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -176,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				E12D95EB293DCE6F8083912C /* Assets.xcassets */,
+				57F84AC6496B124D8327E8D0 /* Localizable.xcstrings */,
 				73ECAE238B5A0400D062D688 /* PrivacyInfo.xcprivacy */,
 			);
 			path = Resources;
@@ -184,6 +197,7 @@
 		8478D92F64C8AFF2FDBB6E8D /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				76BFBE067FC20F3E9AA5638A /* AppRouter.swift */,
 				BC1D094A77FDFB245DC2BDE2 /* CardDetailView.swift */,
 				55832D2C41F57E2F4816155E /* DeckImporter.swift */,
 				51E86D681BC1D12393042FEA /* DeckViews.swift */,
@@ -194,6 +208,8 @@
 				6F65D240A176A142F2B6868D /* Store.swift */,
 				3E54C8F604BC88335F25B7ED /* StudySession.swift */,
 				160D059DBBA1408502821426 /* StudyView.swift */,
+				12047D28AB463DBBF515D544 /* Today.swift */,
+				22496D8DDF8CEFEC8E58AB40 /* TreeViews.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -301,6 +317,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,
+				en,
 				es,
 			);
 			mainGroup = 01E54041CAAB91A4ED85F7CB;
@@ -327,6 +344,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8E966F4ED542FFA50B66FA7C /* Assets.xcassets in Resources */,
+				9268B2FFA3DFCA3C59F7DB46 /* Localizable.xcstrings in Resources */,
 				0CC144151C09BD45F748889E /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -336,6 +354,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB7B6E4D7AA1ED42075B1AB4 /* Assets.xcassets in Resources */,
+				B09A98F4C1A92169FC20D87F /* Localizable.xcstrings in Resources */,
 				3062FAE063B6052344243717 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -347,6 +366,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B1555048B9534C0BFCDF0A20 /* AppRouter.swift in Sources */,
 				FA1A1DE035A14C0998ABCA66 /* CardDetailView.swift in Sources */,
 				C8A33ED8361DECAF68824929 /* DeckImporter.swift in Sources */,
 				B34F0E99113A60963552082E /* DeckViews.swift in Sources */,
@@ -360,6 +380,8 @@
 				6FE0A24D10F781B844A664E6 /* Store.swift in Sources */,
 				9745FB3DB8F0306B1218211A /* StudySession.swift in Sources */,
 				43434355DB9A8F6A1EEB7D84 /* StudyView.swift in Sources */,
+				8E243824644769CDA095C35B /* Today.swift in Sources */,
+				8AB6E704F047913F3C2F649A /* TreeViews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +397,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4ECAD2919AA1029352B1ECE7 /* AppRouter.swift in Sources */,
 				4F4E9EAA99961AB2D68496AF /* CardDetailView.swift in Sources */,
 				DEAEF7C89AB12F680C38D164 /* DeckImporter.swift in Sources */,
 				29B5C65757B2E6FDB2C908C7 /* DeckViews.swift in Sources */,
@@ -386,6 +409,8 @@
 				95F0F65230553ED6C0AE5F1A /* Store.swift in Sources */,
 				DA0AB87FDD35E53B5334F4F8 /* StudySession.swift in Sources */,
 				3C8A4640F1C2183B61677E95 /* StudyView.swift in Sources */,
+				1EDE8F2FAB12F6A4884FD10B /* Today.swift in Sources */,
+				9435B4AC5668BD977917166B /* TreeViews.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -493,12 +518,14 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Litto;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 0.1.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_VERSION = 6.0;
 			};
@@ -639,6 +666,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Litto;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 0.1.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
@@ -646,6 +674,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 6.0;
 			};
