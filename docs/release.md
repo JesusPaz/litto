@@ -25,3 +25,14 @@ Xcode notarizes the Mac app and uploads the iPhone build with the signed-in acco
 After publishing, `local.sh` runs `scripts/release/homebrew.sh <tag>`, which opens a PR in [JesusPaz/homebrew-tap](https://github.com/JesusPaz/homebrew-tap) with the cask generated from the published ZIP (`litto@preview` for `-rc.N`, `litto` for stable; they conflict on purpose). Review and merge it by hand. To retry only that step, run the script again with the same tag.
 
 The App Store Connect record for `com.jesuspaz.litto.ios` must exist before the first TestFlight upload; Apple's API cannot create it.
+
+## CloudKit schema
+
+Release builds talk to the CloudKit **Production** environment, which never creates record types by itself: until the schema is deployed there, each device keeps its data and nothing syncs. Whenever a `@Model` changes (and once for a new container):
+
+```sh
+scripts/release/cloudkit-schema.sh
+```
+
+It pushes the schema to **Development** from a throwaway store (your real data is not touched). Then, in the [CloudKit Console](https://icloud.developer.apple.com), open `iCloud.com.jesuspaz.litto` → Development → **Deploy Schema Changes**. Deployed changes can only add fields and types, never remove them.
+
