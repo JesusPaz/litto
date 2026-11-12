@@ -44,7 +44,7 @@ Claude ──MCP──> <shared folder>/decks/<id>.json
                        └─> progress.json  written by the Mac app, read by get_progress
 ```
 
-On the Mac the shared folder is the app group container, `~/Library/Group Containers/Y76K9N6M4R.com.jesuspaz.litto/Litto`: the app and `litto-mcp` are both sandboxed (required by the Mac App Store) and share it. The first sandboxed launch moves the data of older versions from `~/Library/Application Support/Litto` into it. Because of the sandbox, the MCP server reads images from https URLs, not from arbitrary local files; local images and Anki packages are added from the app.
+On the Mac the shared folder is the app group container, `~/Library/Group Containers/Y76K9N6M4R.com.jesuspaz.litto/Litto`, shared by the app and `litto-mcp`. The Mac App Store build of both is sandboxed, so there the MCP server reads images from https URLs only, and local images and Anki packages are added from the app. The GitHub/Homebrew build is not sandboxed and also reads local files; on its first launch it moves the data of older versions from `~/Library/Application Support/Litto` into the group container.
 
 The deck file owns content; the app owns review progress. Reusing a card `id` corrects that card and keeps its progress.
 
@@ -56,11 +56,11 @@ The deck file owns content; the app owns review progress. Reusing a card `id` co
 | `get_deck` | A deck's full JSON |
 | `create_deck` | New deck with its first cards |
 | `add_cards` | Add or correct cards (same `id` = correction; omitted image is kept) |
-| `set_card_image` | Set or remove one card's image from an https URL |
+| `set_card_image` | Set or remove one card's image from an https URL (or a local file outside the App Store build) |
 | `remove_cards` | Remove cards |
 | `update_deck` | Name, description, voice language, new cards per day |
 | `get_progress` | Cards you struggle with, or all cards |
-| `import_anki` | Import an Anki `.apkg` into the shared folder (only files the sandbox allows; otherwise use ⌘O in the app) |
+| `import_anki` | Import an Anki `.apkg` into the shared folder (in the App Store build, use ⌘O in the app instead) |
 
 Images are downscaled to 1024 px JPEG and stored by content hash.
 

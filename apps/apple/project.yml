@@ -25,6 +25,10 @@ settings:
     LOCALIZATION_PREFERS_STRING_CATALOGS: YES
     INFOPLIST_KEY_CFBundleDisplayName: Litto
     INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.education
+    # Mac builds: "store" (sandboxed, Mac App Store) or "direct" (Developer ID for GitHub and
+    # Homebrew, not sandboxed: it keeps reading local files and moves the pre-group data).
+    # Direct archives pass LITTO_DISTRIBUTION=direct ENABLE_APP_SANDBOX=NO.
+    LITTO_DISTRIBUTION: store
 targets:
   LittoMac:
     type: application
@@ -33,11 +37,7 @@ targets:
       - Shared
       - Resources
       - path: macOS
-        excludes: [Migration, '*.entitlements']
-      # Moves the pre-sandbox data into the container on first launch. Release only: a Debug run
-      # under the same bundle id would otherwise take the data from the installed app.
-      - path: macOS/Migration/container-migration.plist
-        buildPhase: resources
+        excludes: ['*.entitlements']
     dependencies:
       - package: Litto
         product: LittoCore
@@ -50,14 +50,11 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.jesuspaz.litto.mac
         PRODUCT_NAME: Litto
-        CODE_SIGN_ENTITLEMENTS: macOS/Litto.entitlements
-        # Sandboxed for the Mac App Store; the app and the MCP server share an app group.
+        CODE_SIGN_ENTITLEMENTS: macOS/Litto-$(LITTO_DISTRIBUTION).entitlements
+        # The app and the MCP server share an app group either way.
         ENABLE_APP_SANDBOX: YES
         ENABLE_HARDENED_RUNTIME: YES
         INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
-      configs:
-        Debug:
-          EXCLUDED_SOURCE_FILE_NAMES: container-migration.plist
   litto-mcp:
     type: tool
     platform: macOS
@@ -77,7 +74,7 @@ targets:
         # A sandboxed tool needs its bundle id in an embedded Info.plist.
         GENERATE_INFOPLIST_FILE: YES
         CREATE_INFOPLIST_SECTION_IN_BINARY: YES
-        CODE_SIGN_ENTITLEMENTS: macOS/litto-mcp.entitlements
+        CODE_SIGN_ENTITLEMENTS: macOS/litto-mcp-$(LITTO_DISTRIBUTION).entitlements
         ENABLE_APP_SANDBOX: YES
   LittoiOS:
     type: application

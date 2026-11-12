@@ -24,12 +24,12 @@ enum Store {
     }
 
     #if os(macOS)
-    /// Before the sandbox everything lived in ~/Library/Application Support/Litto. On the first
-    /// sandboxed launch macOS moves that folder into the app container (container-migration.plist);
-    /// from there it goes to the group container, where the MCP server can reach it too.
+    /// Before the app group, everything lived in ~/Library/Application Support/Litto. The direct
+    /// (Homebrew) build is not sandboxed, so it moves that folder into the group container on its
+    /// first launch. The sandboxed App Store build cannot see it and never had data there.
     static func moveLegacyData(to root: URL) {
-        // Outside the sandbox the legacy folder is the live data of an installed copy: never touch it.
-        guard ProcessInfo.processInfo.environment["APP_SANDBOX_CONTAINER_ID"] != nil else { return }
+        // LITTO_HOME points somewhere else on purpose (tests, screenshots): leave real data alone.
+        guard ProcessInfo.processInfo.environment["LITTO_HOME"] == nil else { return }
         let legacy = DeckLibrary.legacyRoot
         let files = FileManager.default
         guard legacy.standardizedFileURL != root.standardizedFileURL,

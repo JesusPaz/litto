@@ -36,7 +36,6 @@
 		95F0F65230553ED6C0AE5F1A /* Store.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F65D240A176A142F2B6868D /* Store.swift */; };
 		9745FB3DB8F0306B1218211A /* StudySession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E54C8F604BC88335F25B7ED /* StudySession.swift */; };
 		A6E8200E52DCD9F3CEE8649B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 533338483F7578544D901871 /* SettingsView.swift */; };
-		AF154D3AAF42D7BB34DE03D9 /* container-migration.plist in Resources */ = {isa = PBXBuildFile; fileRef = C5D1B4F1AB2448B0996C3E31 /* container-migration.plist */; };
 		B000C7BAEB43F3F35BC8125C /* FolderSync.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7D58F3F434BFEE29FD9B843 /* FolderSync.swift */; };
 		B09A98F4C1A92169FC20D87F /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 57F84AC6496B124D8327E8D0 /* Localizable.xcstrings */; };
 		B1555048B9534C0BFCDF0A20 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76BFBE067FC20F3E9AA5638A /* AppRouter.swift */; };
@@ -99,7 +98,6 @@
 		B8F737EA79DD2DC15F47014D /* LittoStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LittoStyle.swift; sourceTree = "<group>"; };
 		BC1D094A77FDFB245DC2BDE2 /* CardDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardDetailView.swift; sourceTree = "<group>"; };
 		BF554F9C207CE760D020AB9E /* LittoiOS.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = LittoiOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C5D1B4F1AB2448B0996C3E31 /* container-migration.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "container-migration.plist"; sourceTree = "<group>"; };
 		C7BC6AC191FD026F5D67A0E1 /* Demo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Demo.swift; sourceTree = "<group>"; };
 		D5C0E1D5C323532B5CDD948B /* LittoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LittoApp.swift; sourceTree = "<group>"; };
 		E0DF7EF0EFC0539F9973E6CF /* LittoMac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LittoMac.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -141,7 +139,6 @@
 				25256F16D651DE792631640D /* iOS */,
 				3F67718BD8EE430B5AE97C74 /* LittoMCP */,
 				528D3EC9436EBC2525AB11BD /* macOS */,
-				4330B8DC27D44E464A9C9D3D /* Migration */,
 				2B023303AD9B0D7030BFDBEA /* Packages */,
 				6CAAB29396C8105171C04582 /* Resources */,
 				8478D92F64C8AFF2FDBB6E8D /* Shared */,
@@ -173,15 +170,6 @@
 			);
 			name = LittoMCP;
 			path = ../../Sources/LittoMCP;
-			sourceTree = "<group>";
-		};
-		4330B8DC27D44E464A9C9D3D /* Migration */ = {
-			isa = PBXGroup;
-			children = (
-				C5D1B4F1AB2448B0996C3E31 /* container-migration.plist */,
-			);
-			name = Migration;
-			path = macOS/Migration;
 			sourceTree = "<group>";
 		};
 		528D3EC9436EBC2525AB11BD /* macOS */ = {
@@ -356,7 +344,6 @@
 				8E966F4ED542FFA50B66FA7C /* Assets.xcassets in Resources */,
 				9268B2FFA3DFCA3C59F7DB46 /* Localizable.xcstrings in Resources */,
 				0CC144151C09BD45F748889E /* PrivacyInfo.xcprivacy in Resources */,
-				AF154D3AAF42D7BB34DE03D9 /* container-migration.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -440,7 +427,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = macOS/Litto.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "macOS/Litto-$(LITTO_DISTRIBUTION).entitlements";
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -531,6 +518,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Litto;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LITTO_DISTRIBUTION = store;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 0.1.0;
@@ -569,7 +557,7 @@
 		4B5A29C4935AB849E6DAA0C8 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "macOS/litto-mcp.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "macOS/litto-mcp-$(LITTO_DISTRIBUTION).entitlements";
 				COMBINE_HIDPI_IMAGES = YES;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
 				ENABLE_APP_SANDBOX = YES;
@@ -589,7 +577,7 @@
 		94EFA0AF68AA2280A8133E06 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_ENTITLEMENTS = "macOS/litto-mcp.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "macOS/litto-mcp-$(LITTO_DISTRIBUTION).entitlements";
 				COMBINE_HIDPI_IMAGES = YES;
 				CREATE_INFOPLIST_SECTION_IN_BINARY = YES;
 				ENABLE_APP_SANDBOX = YES;
@@ -610,11 +598,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = macOS/Litto.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "macOS/Litto-$(LITTO_DISTRIBUTION).entitlements";
 				COMBINE_HIDPI_IMAGES = YES;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
-				EXCLUDED_SOURCE_FILE_NAMES = "container-migration.plist";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -686,6 +673,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Litto;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LITTO_DISTRIBUTION = store;
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 0.1.0;

@@ -12,8 +12,8 @@ Good cards: one fact per card. For vocabulary the front is the word or short phr
 language being learned and the back is its meaning in the learner's language (Spanish unless \
 told otherwise). Add a natural example sentence and its translation, pronunciation (IPA) when \
 useful, and a short definition in the language being learned. Add an image only when it helps \
-(concrete nouns, actions); pass an https URL of an image you are allowed to use (the Mac app is sandboxed, \
-so local files outside its folder cannot be read; the learner can add those from the card in the app). Set the deck `language` (BCP-47, e.g. "en-US") to the language of the front so the app \
+(concrete nouns, actions); pass an https URL of an image you are allowed to use (the App Store build is \
+sandboxed and cannot read other local files; the learner can add those from the card in the app). Set the deck `language` (BCP-47, e.g. "en-US") to the language of the front so the app \
 can read it aloud. Card ids are stable keys: reuse an id to correct a card without losing its \
 review progress; never reuse an id for a different word.
 

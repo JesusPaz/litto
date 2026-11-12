@@ -38,7 +38,8 @@ args=(-project apps/apple/Litto.xcodeproj -configuration Release -archivePath "$
     "DEVELOPMENT_TEAM=$APPLE_TEAM_ID" "MARKETING_VERSION=$version" "CURRENT_PROJECT_VERSION=$build"
     "OTHER_CODE_SIGN_FLAGS=--keychain $keychain")
 if [[ "$mode" == mac ]]; then
-    xcodebuild "${args[@]}" -scheme LittoMac -destination 'generic/platform=macOS' 'ARCHS=arm64 x86_64' ONLY_ACTIVE_ARCH=NO archive
+    xcodebuild "${args[@]}" -scheme LittoMac -destination 'generic/platform=macOS' 'ARCHS=arm64 x86_64' ONLY_ACTIVE_ARCH=NO \
+        LITTO_DISTRIBUTION=direct ENABLE_APP_SANDBOX=NO archive
     python3 scripts/release/export-options.py mac export "$work/ExportOptions.plist"
 else
     xcodebuild "${args[@]}" -scheme LittoiOS -destination 'generic/platform=iOS' archive
