@@ -91,6 +91,17 @@ import Testing
         #expect(StudyDay.start(of: date(5, 9), calendar: calendar) == date(5, 4))
     }
 
+    @Test func daylightSavingKeepsStudyDaysOneDayApart() {
+        var dst = Calendar(identifier: .gregorian)
+        dst.timeZone = TimeZone(identifier: "America/New_York")!
+        let noon = { (day: Int) in dst.date(from: DateComponents(year: 2026, month: 3, day: day, hour: 12))! }
+        let starts = (7...9).map { StudyDay.start(of: noon($0), calendar: dst) }
+        #expect(starts.allSatisfy { dst.component(.hour, from: $0) == 4 })
+        #expect(dst.dateComponents([.day], from: starts[1], to: starts[2]).day == 1)
+        let tree = Tree.grow(answersByDay: Dictionary(uniqueKeysWithValues: starts.map { ($0, 20) }), now: noon(9), calendar: dst)
+        #expect(tree.streak == 3)
+    }
+
     @Test func orderIsLearningThenReviewThenNew() {
         let now = date(5, 9)
         var items = [

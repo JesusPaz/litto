@@ -78,11 +78,17 @@ public enum AnkiPackage {
             notesByDeck[top, default: []].append(card)
         }
 
+        // "Español" and "Espanol" slug alike; a second deck must not overwrite the first.
+        var usedIDs = Set<String>()
         let decks = order.enumerated().compactMap { index, name -> DeckFile? in
             guard let cards = notesByDeck[name], !cards.isEmpty else { return nil }
             let slug = DeckFile.slug(name)
-            return DeckFile(id: slug.isEmpty ? "anki-\(index + 1)" : String("anki-\(slug)".prefix(80)), name: name,
-                            language: language(of: cards.map(\.front)), cards: cards)
+            var id = slug.isEmpty ? "anki-\(index + 1)" : String("anki-\(slug)".prefix(80))
+            if !usedIDs.insert(id).inserted {
+                id = String(id.prefix(70)) + "-\(index + 1)"
+                usedIDs.insert(id)
+            }
+            return DeckFile(id: id, name: name, language: language(of: cards.map(\.front)), cards: cards)
         }
         guard !decks.isEmpty else { throw ImportError(description: "the package has no cards Litto can use") }
         return Result(decks: decks, skipped: skipped)

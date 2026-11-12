@@ -5,9 +5,9 @@ public enum StudyDay {
     public static let rolloverHour = 4
 
     public static func start(of date: Date, calendar: Calendar = .current) -> Date {
-        let shifted = date.addingTimeInterval(-Double(rolloverHour) * 3600)
-        let midnight = calendar.startOfDay(for: shifted)
-        return calendar.date(byAdding: .hour, value: rolloverHour, to: midnight)!
+        // Wall-clock 4 AM, so a daylight-saving change does not shift the day by an hour.
+        let start = calendar.date(bySettingHour: rolloverHour, minute: 0, second: 0, of: calendar.startOfDay(for: date))!
+        return date < start ? calendar.date(byAdding: .day, value: -1, to: start)! : start
     }
 
     public static func end(of date: Date, calendar: Calendar = .current) -> Date {

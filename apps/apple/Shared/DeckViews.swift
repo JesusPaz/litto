@@ -179,7 +179,7 @@ struct RootView: View {
             }
             try library.save(file)
             #else
-            try DeckImporter.apply(deck, in: context, media: media)
+            try DeckImporter.apply(deck, in: context, media: media, removeMissing: false)
             #endif
         }
         #if os(macOS)
