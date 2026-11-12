@@ -40,9 +40,14 @@ class ReleaseTests(unittest.TestCase):
             subprocess.run([sys.executable, str(SCRIPTS / 'export-options.py'), 'mac', 'export', str(path)], check=True)
             mac = plistlib.loads(path.read_bytes())
             self.assertEqual((mac['method'], mac['destination'], mac['signingStyle']), ('developer-id', 'export', 'automatic'))
-            subprocess.run([sys.executable, str(SCRIPTS / 'export-options.py'), 'ios', 'upload', str(path)], check=True)
+            subprocess.run([sys.executable, str(SCRIPTS / 'export-options.py'), 'ios', 'upload', str(path), '--internal'], check=True)
             ios = plistlib.loads(path.read_bytes())
             self.assertEqual((ios['method'], ios['testFlightInternalTestingOnly']), ('app-store-connect', True))
+            subprocess.run([sys.executable, str(SCRIPTS / 'export-options.py'), 'ios', 'upload', str(path)], check=True)
+            self.assertFalse(plistlib.loads(path.read_bytes())['testFlightInternalTestingOnly'])
+            subprocess.run([sys.executable, str(SCRIPTS / 'export-options.py'), 'macstore', 'upload', str(path)], check=True)
+            store = plistlib.loads(path.read_bytes())
+            self.assertEqual((store['method'], store['destination']), ('app-store-connect', 'upload'))
 
     def test_expected_mac_assets(self):
         delivery = load('eas_delivery', 'eas-delivery.py')

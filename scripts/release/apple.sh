@@ -42,7 +42,7 @@ if [[ "$mode" == mac ]]; then
     python3 scripts/release/export-options.py mac export "$work/ExportOptions.plist"
 else
     xcodebuild "${args[@]}" -scheme LittoiOS -destination 'generic/platform=iOS' archive
-    python3 scripts/release/export-options.py ios upload "$work/ExportOptions.plist"
+    python3 scripts/release/export-options.py ios upload "$work/ExportOptions.plist" --internal
 fi
 xcodebuild -exportArchive -archivePath "$work/Litto.xcarchive" -exportPath "$work/export" \
     -exportOptionsPlist "$work/ExportOptions.plist" "${auth[@]}"

@@ -1,0 +1,78 @@
+{
+  "cards": [
+    {
+      "back": "una taza de café",
+      "definition": "A hot drink made from roasted coffee beans.",
+      "example": "I can't start my day without a cup of coffee.",
+      "exampleTranslation": "No puedo empezar el día sin una taza de café.",
+      "front": "a cup of coffee",
+      "id": "coffee",
+      "pronunciation": "/ə kʌp əv ˈkɔːfi/"
+    },
+    {
+      "back": "bicicleta",
+      "definition": "A vehicle with two wheels that you ride by pushing pedals.",
+      "example": "She rides her bicycle to work, even in winter.",
+      "exampleTranslation": "Va al trabajo en bicicleta, incluso en invierno.",
+      "front": "bicycle",
+      "id": "bicycle",
+      "pronunciation": "/ˈbaɪsɪkəl/"
+    },
+    {
+      "back": "manzano",
+      "definition": "A tree that produces apples.",
+      "example": "There is an old apple tree in my grandmother's garden.",
+      "exampleTranslation": "Hay un manzano viejo en el jardín de mi abuela.",
+      "front": "apple tree",
+      "id": "apple-tree",
+      "pronunciation": "/ˈæpəl triː/"
+    },
+    {
+      "back": "llave",
+      "definition": "A piece of metal that opens a lock.",
+      "example": "I left my keys on the kitchen table.",
+      "exampleTranslation": "Dejé las llaves en la mesa de la cocina.",
+      "front": "key",
+      "id": "key",
+      "pronunciation": "/kiː/"
+    },
+    {
+      "back": "ventana",
+      "definition": "An opening in a wall, with glass, that lets light in.",
+      "example": "Could you open the window? It's hot in here.",
+      "exampleTranslation": "¿Puedes abrir la ventana? Hace calor aquí.",
+      "front": "window",
+      "id": "window",
+      "pronunciation": "/ˈwɪndoʊ/"
+    },
+    {
+      "back": "llevarse bien",
+      "definition": "To have a friendly relationship.",
+      "example": "My sister and I get along really well.",
+      "exampleTranslation": "Mi hermana y yo nos llevamos muy bien.",
+      "front": "to get along",
+      "id": "get-along",
+      "pronunciation": "/tə ɡɛt əˈlɔŋ/"
+    },
+    {
+      "back": "tener ganas de, esperar con ilusión",
+      "definition": "To feel happy about something that is going to happen.",
+      "example": "I'm looking forward to the weekend.",
+      "exampleTranslation": "Tengo muchas ganas de que llegue el fin de semana.",
+      "front": "to look forward to",
+      "id": "look-forward-to"
+    },
+    {
+      "back": "quedarse sin",
+      "definition": "To use all of something.",
+      "example": "We ran out of milk again.",
+      "exampleTranslation": "Nos quedamos sin leche otra vez.",
+      "front": "to run out of",
+      "id": "run-out-of"
+    }
+  ],
+  "description": "Words you use every day.",
+  "id": "everyday-english",
+  "language": "en-US",
+  "name": "Everyday English"
+}

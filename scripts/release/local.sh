@@ -1,6 +1,7 @@
 #!/bin/bash
 # Release from a Mac signed into Xcode with the Litto team, without API keys:
-# Xcode notarizes the Mac app and uploads the iPhone build to TestFlight.
+# Xcode notarizes the Mac app (Developer ID, for GitHub and Homebrew) and uploads the Mac and
+# iPhone builds to App Store Connect. Previews (-rc.N) go to internal TestFlight only.
 #   scripts/release/local.sh v0.1.0-rc.1 [mac|ios|all]
 set -euo pipefail
 tag=${1:?vX.Y.Z or vX.Y.Z-rc.N}
@@ -21,6 +22,11 @@ if [[ "$platform" != ios ]]; then
     python3 scripts/release/export-options.py mac upload "$work/mac.plist"
     xcodebuild -exportArchive -archivePath "$work/mac.xcarchive" -exportPath "$work/mac-upload" \
         -exportOptionsPlist "$work/mac.plist" -allowProvisioningUpdates -quiet
+    # The same archive, re-signed for the Mac App Store and uploaded to App Store Connect.
+    python3 scripts/release/export-options.py macstore upload "$work/macstore.plist"
+    xcodebuild -exportArchive -archivePath "$work/mac.xcarchive" -exportPath "$work/macstore-upload" \
+        -exportOptionsPlist "$work/macstore.plist" -allowProvisioningUpdates -quiet
+    echo "Uploaded Mac build $build to App Store Connect."
     echo 'Waiting for notarization…'
     for _ in $(seq 1 60); do
         if xcodebuild -exportNotarizedApp -archivePath "$work/mac.xcarchive" -exportPath "$work/mac" >/dev/null 2>&1; then break; fi
@@ -37,10 +43,12 @@ fi
 
 if [[ "$platform" != mac ]]; then
     xcodebuild "${common[@]}" -scheme LittoiOS -destination 'generic/platform=iOS' -archivePath "$work/ios.xcarchive" archive -quiet
-    python3 scripts/release/export-options.py ios upload "$work/ios.plist"
+    internal=()
+    [[ "$tag" != *-rc.* ]] || internal=(--internal)
+    python3 scripts/release/export-options.py ios upload "$work/ios.plist" ${internal[@]+"${internal[@]}"}
     xcodebuild -exportArchive -archivePath "$work/ios.xcarchive" -exportPath "$work/ios-upload" \
         -exportOptionsPlist "$work/ios.plist" -allowProvisioningUpdates -quiet
-    echo "Uploaded iPhone build $build to TestFlight."
+    echo "Uploaded iPhone build $build to App Store Connect."
 fi
 
 if [[ "$platform" != ios ]]; then

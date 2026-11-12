@@ -35,14 +35,16 @@ Native SwiftUI apps, FSRS-6 scheduling, iCloud sync, and an MCP server so Claude
 ## How it fits together
 
 ```
-Claude ──MCP──> ~/Library/Application Support/Litto/decks/<id>.json
-                ~/Library/Application Support/Litto/media/<hash>.jpg
+Claude ──MCP──> <shared folder>/decks/<id>.json
+                <shared folder>/media/<hash>.jpg
                        │  the Mac app watches the folder and imports
                        ▼
                  SwiftData ──iCloud──> iPhone
                        │
                        └─> progress.json  written by the Mac app, read by get_progress
 ```
+
+On the Mac the shared folder is the app group container, `~/Library/Group Containers/Y76K9N6M4R.com.jesuspaz.litto/Litto`: the app and `litto-mcp` are both sandboxed (required by the Mac App Store) and share it. The first sandboxed launch moves the data of older versions from `~/Library/Application Support/Litto` into it. Because of the sandbox, the MCP server reads images from https URLs, not from arbitrary local files; local images and Anki packages are added from the app.
 
 The deck file owns content; the app owns review progress. Reusing a card `id` corrects that card and keeps its progress.
 
@@ -54,11 +56,11 @@ The deck file owns content; the app owns review progress. Reusing a card `id` co
 | `get_deck` | A deck's full JSON |
 | `create_deck` | New deck with its first cards |
 | `add_cards` | Add or correct cards (same `id` = correction; omitted image is kept) |
-| `set_card_image` | Set or remove one card's image from a file path or https URL |
+| `set_card_image` | Set or remove one card's image from an https URL |
 | `remove_cards` | Remove cards |
 | `update_deck` | Name, description, voice language, new cards per day |
 | `get_progress` | Cards you struggle with, or all cards |
-| `import_anki` | Import an Anki `.apkg` into the shared folder |
+| `import_anki` | Import an Anki `.apkg` into the shared folder (only files the sandbox allows; otherwise use ⌘O in the app) |
 
 Images are downscaled to 1024 px JPEG and stored by content hash.
 
@@ -117,7 +119,7 @@ Unsigned builds keep everything local; iCloud sync needs signing with team `Y76K
 
 `LITTO_HOME` moves the shared folder (useful for tests). In DEBUG builds, `LITTO_SEED=<deck.json>` and `LITTO_DEMO=deck|card|study|answer` open screens in the simulator without UI automation.
 
-Adding a language: open `apps/apple/Resources/Localizable.xcstrings` in Xcode, add the language and translate; Spanish is the source. Plurals are handled per language there.
+Adding a language: open `apps/apple/Resources/Localizable.xcstrings` in Xcode, add the language and translate; English is the source. Plurals are handled per language there.
 
 Design notes: [design.md](design.md). Releasing: [docs/release.md](docs/release.md).
 
