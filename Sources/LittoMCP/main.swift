@@ -12,11 +12,13 @@ Good cards: one fact per card. For vocabulary the front is the word or short phr
 language being learned and the back is its meaning in the learner's language (Spanish unless \
 told otherwise). Add a natural example sentence and its translation, pronunciation (IPA) when \
 useful, and a short definition in the language being learned. Add an image only when it helps \
-(concrete nouns, actions); pass a local file path or an https URL of an image you are allowed to use. Set the deck `language` (BCP-47, e.g. "en-US") to the language of the front so the app \
+(concrete nouns, actions); pass an https URL of an image you are allowed to use (the Mac app is sandboxed, \
+so local files outside its folder cannot be read; the learner can add those from the card in the app). Set the deck `language` (BCP-47, e.g. "en-US") to the language of the front so the app \
 can read it aloud. Card ids are stable keys: reuse an id to correct a card without losing its \
 review progress; never reuse an id for a different word.
 
-To bring in an existing Anki deck, call import_anki with the path to the .apkg file; the \
+To bring in an existing Anki deck, call import_anki with the path to the .apkg file. The sandbox may \
+not let it read the file; then ask the learner to open it in Litto (File › Import…). The \
 imported cards can then be improved like any other (add examples, definitions, images).
 
 Use get_progress to see which cards the learner struggles with, then reinforce them (better \
@@ -32,7 +34,7 @@ let cardSchema: Value = .object([
         "back": .object(["type": "string", "description": "Answer side, e.g. the meaning."]),
         "pronunciation": .object(["type": "string", "description": "IPA or a simple guide."]),
         "definition": .object(["type": "string", "description": "Short definition in the language being learned."]),
-        "image": .object(["type": "string", "description": "Local file path or https URL of an image. Omit to keep the current image; empty string removes it."]),
+        "image": .object(["type": "string", "description": "https URL of an image (or a local path the sandbox allows). Omit to keep the current image; empty string removes it."]),
         "example": .object(["type": "string", "description": "Example sentence using the front."]),
         "exampleTranslation": .object(["type": "string"]),
         "notes": .object(["type": "string", "description": "Usage notes, mnemonics, false friends."]),
@@ -70,7 +72,7 @@ let tools = [
          annotations: .init(destructiveHint: true)),
     Tool(name: "set_card_image", description: "Set or remove one card's image without resending the card. Images are downscaled to 1024 px JPEG.",
          inputSchema: schema(["deck_id": deckID, "card_id": .object(["type": "string"]),
-                              "image": .object(["type": "string", "description": "Local file path or https URL; empty string removes the image."])],
+                              "image": .object(["type": "string", "description": "https URL (or a local path the sandbox allows); empty string removes the image."])],
                              required: ["deck_id", "card_id", "image"])),
     Tool(name: "update_deck", description: "Change a deck's name, description, language or new cards per day.",
          inputSchema: schema(deckSettings.merging(["deck_id": deckID]) { a, _ in a }, required: ["deck_id"])),
@@ -228,6 +230,11 @@ func run(_ name: String, _ args: Arguments, original: Arguments) throws -> Strin
     case "import_anki":
         guard let path = args.path, !path.isEmpty else { throw ToolError(description: "path is required") }
         let url = URL(fileURLWithPath: (path as NSString).expandingTildeInPath)
+        guard FileManager.default.isReadableFile(atPath: url.path) else {
+            throw ToolError(description: FileManager.default.fileExists(atPath: url.path)
+                ? "Litto is sandboxed and cannot read \(path); open it in the Litto app instead (File › Import…, ⌘O)"
+                : "no file at \(path)")
+        }
         let result = try AnkiPackage.read(url, media: library.media)
         var lines: [String] = []
         for deck in result.decks {
@@ -265,7 +272,9 @@ func resolveImage(_ value: String?) async throws -> String? {
     } else {
         let path = (value.hasPrefix("file://") ? URL(string: value)?.path ?? value : value) as NSString
         guard let contents = FileManager.default.contents(atPath: path.expandingTildeInPath) else {
-            throw ToolError(description: "no image file at \(value)")
+            throw ToolError(description: FileManager.default.fileExists(atPath: path.expandingTildeInPath)
+                ? "Litto is sandboxed and cannot read \(value); pass an https URL, or add the image from the card in the Litto app"
+                : "no image file at \(value)")
         }
         data = contents
     }

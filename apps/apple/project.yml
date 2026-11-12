@@ -29,7 +29,15 @@ targets:
   LittoMac:
     type: application
     platform: macOS
-    sources: [Shared, macOS, Resources]
+    sources:
+      - Shared
+      - Resources
+      - path: macOS
+        excludes: [Migration, '*.entitlements']
+      # Moves the pre-sandbox data into the container on first launch. Release only: a Debug run
+      # under the same bundle id would otherwise take the data from the installed app.
+      - path: macOS/Migration/container-migration.plist
+        buildPhase: resources
     dependencies:
       - package: Litto
         product: LittoCore
@@ -43,9 +51,13 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.jesuspaz.litto.mac
         PRODUCT_NAME: Litto
         CODE_SIGN_ENTITLEMENTS: macOS/Litto.entitlements
-        # The MCP server writes decks to ~/Library/Application Support/Litto; a sandboxed app could not read them.
-        ENABLE_APP_SANDBOX: NO
+        # Sandboxed for the Mac App Store; the app and the MCP server share an app group.
+        ENABLE_APP_SANDBOX: YES
         ENABLE_HARDENED_RUNTIME: YES
+        INFOPLIST_KEY_ITSAppUsesNonExemptEncryption: NO
+      configs:
+        Debug:
+          EXCLUDED_SOURCE_FILE_NAMES: container-migration.plist
   litto-mcp:
     type: tool
     platform: macOS
@@ -62,8 +74,11 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.jesuspaz.litto.mcp
         ENABLE_HARDENED_RUNTIME: YES
         SKIP_INSTALL: YES
-        GENERATE_INFOPLIST_FILE: NO
-        CODE_SIGN_ENTITLEMENTS: ''
+        # A sandboxed tool needs its bundle id in an embedded Info.plist.
+        GENERATE_INFOPLIST_FILE: YES
+        CREATE_INFOPLIST_SECTION_IN_BINARY: YES
+        CODE_SIGN_ENTITLEMENTS: macOS/litto-mcp.entitlements
+        ENABLE_APP_SANDBOX: YES
   LittoiOS:
     type: application
     platform: iOS

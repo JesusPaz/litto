@@ -6,7 +6,9 @@ import Foundation
 ///     <root>/media/<hash>.jpg     card images, named by content
 ///     <root>/progress.json          review progress exported by the Mac app for Claude
 ///
-/// Default root is ~/Library/Application Support/Litto; `LITTO_HOME` overrides it.
+/// On the Mac the root is the app group container both sandboxed processes share
+/// (~/Library/Group Containers/<group>/Litto); elsewhere it is Application Support/Litto.
+/// `LITTO_HOME` overrides it.
 public struct DeckLibrary: Sendable {
     public let root: URL
 
@@ -14,10 +16,23 @@ public struct DeckLibrary: Sendable {
         self.root = root
     }
 
+    /// Shared by the Mac app and the MCP server it ships; both are sandboxed.
+    public static let appGroup = "Y76K9N6M4R.com.jesuspaz.litto"
+
     public static var defaultRoot: URL {
         if let override = ProcessInfo.processInfo.environment["LITTO_HOME"], !override.isEmpty {
             return URL(fileURLWithPath: (override as NSString).expandingTildeInPath, isDirectory: true)
         }
+        #if os(macOS)
+        if let group = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: appGroup) {
+            return group.appendingPathComponent("Litto", isDirectory: true)
+        }
+        #endif
+        return legacyRoot
+    }
+
+    /// Where Litto kept everything before the Mac app was sandboxed (and still does on iPhone).
+    public static var legacyRoot: URL {
         let support = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
         return support.appendingPathComponent("Litto", isDirectory: true)
     }

@@ -2,7 +2,7 @@
 
 Versions are explicit tags: `vX.Y.Z-rc.N` for previews (GitHub prerelease), `vX.Y.Z` for stable. Build numbers come from the current minute (`scripts/release/build-number.py`), so every upload is unique.
 
-Artifacts per release: notarized universal `Litto-<tag>-macOS.zip` (and `.dmg` from CI), `SHA256SUMS`, and an iPhone build on TestFlight (internal testers).
+Artifacts per release: notarized universal `Litto-<tag>-macOS.zip` (and `.dmg` from CI), `SHA256SUMS`, a Mac App Store build and an iPhone build in App Store Connect. Previews (`-rc.N`) upload the iPhone build for internal TestFlight testers only; stable tags upload one that can be submitted to App Review.
 
 ## From CI (same path as AFK)
 
@@ -24,7 +24,13 @@ Xcode notarizes the Mac app and uploads the iPhone build with the signed-in acco
 
 After publishing, `local.sh` runs `scripts/release/homebrew.sh <tag>`, which opens a PR in [JesusPaz/homebrew-tap](https://github.com/JesusPaz/homebrew-tap) with the cask generated from the published ZIP (`litto@preview` for `-rc.N`, `litto` for stable; they conflict on purpose). Review and merge it by hand. To retry only that step, run the script again with the same tag.
 
-The App Store Connect record for `com.jesuspaz.litto.ios` must exist before the first TestFlight upload; Apple's API cannot create it.
+The App Store Connect records for `com.jesuspaz.litto.ios` and `com.jesuspaz.litto.mac` must exist before the first upload; Apple's API cannot create them. `local.sh` exports the Mac archive twice: Developer ID (notarized, for GitHub and Homebrew) and Mac App Store (uploaded). CI (`apple.sh`) still builds only the Developer ID app and internal TestFlight builds.
+
+Store listing, screenshots, privacy policy and review notes: [docs/app-store](app-store/README.md).
+
+## Sandbox
+
+Both Mac executables are sandboxed (the Mac App Store requires it) and share the app group `Y76K9N6M4R.com.jesuspaz.litto`, whose container holds the decks, images, progress and the SwiftData store. The first sandboxed launch of a Release build moves `~/Library/Application Support/Litto` into the app container (`macOS/Migration/container-migration.plist`, which Debug builds leave out so a local run cannot take the data of an installed copy), and `Store.moveLegacyData` moves it on into the group container.
 
 ## CloudKit schema
 
