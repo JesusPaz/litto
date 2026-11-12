@@ -90,15 +90,23 @@ struct CardDetailView: View {
             guard let item else { return }
             Task {
                 let data = try? await item.loadTransferable(type: Data.self)
-                setImage(data)
                 photo = nil
+                guard let data else {
+                    imageError = String(localized: "That image could not be used.")
+                    return
+                }
+                setImage(data)
             }
         }
         .fileImporter(isPresented: $choosingFile, allowedContentTypes: [.image]) { result in
             guard let url = try? result.get() else { return }
             let access = url.startAccessingSecurityScopedResource()
             defer { if access { url.stopAccessingSecurityScopedResource() } }
-            setImage(try? Data(contentsOf: url))
+            guard let data = try? Data(contentsOf: url) else {
+                imageError = String(localized: "That image could not be used.")
+                return
+            }
+            setImage(data)
         }
     }
 

@@ -140,6 +140,11 @@ func cards(from inputs: [CardInput]?) throws -> [CardFile] {
     if let empty = cards.first(where: { $0.id.isEmpty }) {
         throw ToolError(description: "card \"\(empty.front)\" needs an id")
     }
+    // Ids default to a slug of the front, so "Café" and "cafe" would silently replace each other.
+    var seen = Set<String>()
+    if let duplicate = cards.first(where: { !seen.insert($0.id).inserted }) {
+        throw ToolError(description: "two cards have the id \"\(duplicate.id)\"; give each one its own id")
+    }
     return cards
 }
 

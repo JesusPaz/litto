@@ -4,17 +4,23 @@ import SwiftData
 
 enum DeckImporter {
     /// Creates or updates the deck from its file. Content follows the file; review progress is kept
-    /// for cards whose id is unchanged. Cards no longer in the file are removed.
+    /// for cards whose id is unchanged. Cards no longer in the file are removed unless `removeMissing` is false
+    /// (an Anki package adds to a deck, like the Mac and Claude imports do).
     @MainActor
     @discardableResult
-    static func apply(_ file: DeckFile, in context: ModelContext, media: MediaStore? = nil, now: Date = Date()) throws -> Deck {
+    static func apply(_ file: DeckFile, in context: ModelContext, media: MediaStore? = nil, removeMissing: Bool = true, now: Date = Date()) throws -> Deck {
         let id = file.id
         let matches = try context.fetch(FetchDescriptor<Deck>(predicate: #Predicate { $0.deckID == id }, sortBy: [SortDescriptor(\.createdAt)]))
         let deck: Deck
         if let first = matches.first {
             deck = first
-            // Two devices importing the same file before syncing leave duplicates; keep the oldest.
-            for duplicate in matches.dropFirst() { context.delete(duplicate) }
+            // Two devices importing the same file before syncing leave duplicates; keep the oldest,
+            // with the cards (and the reviews) of the others, which the card pass below dedups.
+            for duplicate in matches.dropFirst() {
+                for card in duplicate.allCards { card.deck = deck }
+                duplicate.cards = []
+                context.delete(duplicate)
+            }
         } else {
             deck = Deck(deckID: id, name: file.name)
             context.insert(deck)
@@ -26,11 +32,20 @@ enum DeckImporter {
 
         var existing: [String: StudyCard] = [:]
         for card in deck.allCards {
-            if existing[card.cardID] == nil { existing[card.cardID] = card } else { context.delete(card) }
+            // Of two copies of a card, keep the one with more reviews.
+            guard let kept = existing[card.cardID] else { existing[card.cardID] = card; continue }
+            if kept.reps >= card.reps {
+                context.delete(card)
+            } else {
+                context.delete(kept)
+                existing[card.cardID] = card
+            }
         }
-        let keep = Set(file.cards.map(\.id))
-        for (cardID, card) in existing where !keep.contains(cardID) {
-            context.delete(card)
+        if removeMissing {
+            let keep = Set(file.cards.map(\.id))
+            for (cardID, card) in existing where !keep.contains(cardID) {
+                context.delete(card)
+            }
         }
         for (index, item) in file.cards.enumerated() {
             let card: StudyCard
