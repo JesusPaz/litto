@@ -12,23 +12,23 @@ extension Tree {
 
     var stageName: String {
         switch stage {
-        case .seed: String(localized: "Semilla")
-        case .sprout: String(localized: "Brote")
-        case .sapling: String(localized: "Arbolito")
-        case .young: String(localized: "Árbol joven")
-        case .tree: String(localized: "Árbol")
-        case .great: String(localized: "Gran árbol")
-        case .giant: String(localized: "Árbol gigante")
-        case .sequoia: String(localized: "Secuoya gigante")
+        case .seed: String(localized: "Seed")
+        case .sprout: String(localized: "Sprout")
+        case .sapling: String(localized: "Sapling")
+        case .young: String(localized: "Young tree")
+        case .tree: String(localized: "Tree")
+        case .great: String(localized: "Great tree")
+        case .giant: String(localized: "Giant tree")
+        case .sequoia: String(localized: "Giant sequoia")
         }
     }
 
     var healthText: String {
         switch health {
-        case .healthy: studiedToday || studyDays == 0 ? String(localized: "Sano") : String(localized: "Sano · estudia hoy para seguir la racha")
-        case .thirsty: String(localized: "Tiene sed · estudia hoy")
-        case .drying: String(localized: "Se está secando · vuelve y reverdece")
-        case .dry: String(localized: "Seco · una sesión lo empieza a recuperar")
+        case .healthy: studiedToday || studyDays == 0 ? String(localized: "Healthy") : String(localized: "Healthy · study today to keep the streak")
+        case .thirsty: String(localized: "Thirsty · study today")
+        case .drying: String(localized: "Drying out · come back and it turns green again")
+        case .dry: String(localized: "Dry · one session starts bringing it back")
         }
     }
 
@@ -60,12 +60,12 @@ struct TreeCard: View {
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 4) {
                 Text(tree.stageName).font(.headline)
-                Text("\(tree.heightText) · \(tree.rings) anillos")
+                Text("\(tree.heightText) · \(tree.rings) rings")
                     .font(.subheadline)
                     .monospacedDigit()
                     .foregroundStyle(.secondary)
                 if tree.streak > 0 {
-                    Text("Racha de \(tree.streak) días · crece ×\(tree.nextDayMultiplier.formatted(.number.precision(.fractionLength(1))))")
+                    Text("\(tree.streak)-day streak · grows ×\(tree.nextDayMultiplier.formatted(.number.precision(.fractionLength(1))))")
                         .font(.subheadline)
                         .monospacedDigit()
                         .foregroundStyle(LittoStyle.review)
@@ -148,10 +148,10 @@ struct TreeTodayNote: View {
 
     var body: some View {
         if today.count >= Tree.answersPerDay {
-            Label("Hoy tu árbol creció", systemImage: "leaf")
+            Label("Your tree grew today", systemImage: "leaf")
                 .foregroundStyle(LittoStyle.review)
         } else {
-            Label("Con \(Tree.answersPerDay - today.count) respuestas más, hoy crece tu árbol", systemImage: "leaf")
+            Label("\(Tree.answersPerDay - today.count) more answers and your tree grows today", systemImage: "leaf")
                 .foregroundStyle(.secondary)
         }
     }

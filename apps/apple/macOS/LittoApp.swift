@@ -39,15 +39,15 @@ struct LittoCommands: Commands {
 
     var body: some Commands {
         CommandGroup(replacing: .newItem) {
-            Button("Importar…") { router.importing = true }
+            Button("Import…") { router.importing = true }
                 .keyboardShortcut("o")
         }
-        CommandMenu("Estudio") {
-            Button("Empezar repaso de hoy") { router.startToday = true }
+        CommandMenu("Study") {
+            Button("Start today's review") { router.startToday = true }
                 .keyboardShortcut(.return, modifiers: .command)
-            Button("Estudiar el mazo elegido") { router.studySelectedDeck = true }
+            Button("Study selected deck") { router.studySelectedDeck = true }
                 .keyboardShortcut(.return, modifiers: [.command, .shift])
-            Button("Ver palabras de hoy") { router.showTodayWords = true }
+            Button("See today's words") { router.showTodayWords = true }
                 .keyboardShortcut("l")
         }
     }

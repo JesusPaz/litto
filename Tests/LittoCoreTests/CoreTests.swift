@@ -5,12 +5,12 @@ import Testing
 
 @Suite struct DeckFileTests {
     @Test func slugFoldsAccentsAndSpaces() {
-        #expect(DeckFile.slug("Inglés de negocios!") == "ingles-de-negocios")
+        #expect(DeckFile.slug("Business Café!") == "business-cafe")
         #expect(DeckFile.slug("  Verbos  irregulares 2 ") == "verbos-irregulares-2")
     }
 
     @Test func rejectsDuplicateCardIDs() {
-        let deck = DeckFile(id: "en", name: "Inglés", cards: [
+        let deck = DeckFile(id: "en", name: "English", cards: [
             CardFile(id: "a", front: "dog", back: "perro"),
             CardFile(id: "a", front: "cat", back: "gato"),
         ])
@@ -18,7 +18,7 @@ import Testing
     }
 
     @Test func rejectsEmptyBack() {
-        let deck = DeckFile(id: "en", name: "Inglés", cards: [CardFile(id: "a", front: "dog", back: " ")])
+        let deck = DeckFile(id: "en", name: "English", cards: [CardFile(id: "a", front: "dog", back: " ")])
         #expect(throws: DeckValidationError.self) { try deck.validate() }
     }
 
@@ -26,13 +26,13 @@ import Testing
         let root = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         defer { try? FileManager.default.removeItem(at: root) }
         let library = DeckLibrary(root: root)
-        let deck = DeckFile(id: "en-basico", name: "Inglés básico", language: "en-US", cards: [
+        let deck = DeckFile(id: "en-basic", name: "Basic English", language: "en-US", cards: [
             CardFile(id: "dog", front: "dog", back: "perro", example: "The dog sleeps."),
         ])
         try library.save(deck)
-        #expect(try library.deckIDs() == ["en-basico"])
-        #expect(try library.load("en-basico") == deck)
-        try library.delete("en-basico")
+        #expect(try library.deckIDs() == ["en-basic"])
+        #expect(try library.load("en-basic") == deck)
+        try library.delete("en-basic")
         #expect(try library.deckIDs().isEmpty)
     }
 }
@@ -124,7 +124,7 @@ import Testing
 
 @Suite struct DeckEditingTests {
     @Test func upsertAddsAndReplaces() {
-        var deck = DeckFile(id: "en", name: "Inglés", cards: [CardFile(id: "dog", front: "dog", back: "perro")])
+        var deck = DeckFile(id: "en", name: "English", cards: [CardFile(id: "dog", front: "dog", back: "perro")])
         let result = deck.upsert([
             CardFile(id: "dog", front: "dog", back: "perro", example: "Good dog."),
             CardFile(id: "cat", front: "cat", back: "gato"),
@@ -135,7 +135,7 @@ import Testing
     }
 
     @Test func removeReportsMissing() {
-        var deck = DeckFile(id: "en", name: "Inglés", cards: [CardFile(id: "dog", front: "dog", back: "perro")])
+        var deck = DeckFile(id: "en", name: "English", cards: [CardFile(id: "dog", front: "dog", back: "perro")])
         #expect(deck.remove(ids: ["dog", "ghost"]) == ["ghost"])
         #expect(deck.cards.isEmpty)
     }
@@ -173,7 +173,7 @@ import Testing
     }
 
     @Test func deckRejectsBadImageNames() {
-        let deck = DeckFile(id: "en", name: "Inglés", cards: [CardFile(id: "a", front: "dog", back: "perro", image: "../../etc/passwd")])
+        let deck = DeckFile(id: "en", name: "English", cards: [CardFile(id: "a", front: "dog", back: "perro", image: "../../etc/passwd")])
         #expect(throws: DeckValidationError.self) { try deck.validate() }
     }
 }

@@ -40,30 +40,30 @@ struct RootView: View {
                     .onDelete { offsets in offsets.map { decks[$0] }.forEach(delete) }
                 }
             }
-            .navigationTitle("Mazos")
+            .navigationTitle("Decks")
             .overlay {
                 if decks.isEmpty {
                     ContentUnavailableView {
-                        Label("Sin mazos", systemImage: "rectangle.stack")
+                        Label("No decks", systemImage: "rectangle.stack")
                     } description: {
-                        Text("Pídele a Claude que te cree uno, o importa un mazo de Anki (.apkg) o un archivo JSON.")
+                        Text("Ask Claude to make one, or import an Anki deck (.apkg) or a JSON file.")
                     } actions: {
-                        Button("Importar…") { router.importing = true }
+                        Button("Import…") { router.importing = true }
                         #if os(macOS)
-                        SettingsLink { Text("Conectar Claude…") }
+                        SettingsLink { Text("Connect Claude…") }
                         #endif
                     }
                 }
             }
             .toolbar {
-                Button("Importar", systemImage: "square.and.arrow.down") { router.importing = true }
+                Button("Import", systemImage: "square.and.arrow.down") { router.importing = true }
                     .disabled(working)
                 #if os(iOS)
-                Button("Ajustes", systemImage: "gearshape") { showingSettings = true }
+                Button("Settings", systemImage: "gearshape") { showingSettings = true }
                 #endif
             }
             .overlay {
-                if working { ProgressView("Importando…").padding().background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12)) }
+                if working { ProgressView("Importing…").padding().background(.regularMaterial, in: RoundedRectangle(cornerRadius: 12)) }
             }
             #if os(macOS)
             .navigationSplitViewColumnWidth(min: 220, ideal: 260)
@@ -72,7 +72,7 @@ struct RootView: View {
             if let selection, let deck = decks.first(where: { $0.persistentModelID == selection }) {
                 DeckDetailView(deck: deck, onDelete: { delete(deck) })
             } else {
-                ContentUnavailableView("Elige un mazo", systemImage: "rectangle.stack")
+                ContentUnavailableView("Choose a deck", systemImage: "rectangle.stack")
             }
         }
         .onAppear {
@@ -87,30 +87,30 @@ struct RootView: View {
             Task { await importFiles(result) }
         }
         #if os(iOS)
-        .fullScreenCover(isPresented: studyingToday) { StudyView(decks: decks, title: String(localized: "Hoy"), context: context) }
+        .fullScreenCover(isPresented: studyingToday) { StudyView(decks: decks, title: String(localized: "Today"), context: context) }
         .sheet(isPresented: $showingSettings) {
             NavigationStack {
                 Form { StudySettingsSection() }
-                    .navigationTitle("Ajustes")
+                    .navigationTitle("Settings")
                     .navigationBarTitleDisplayMode(.inline)
-                    .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Listo") { showingSettings = false } } }
+                    .toolbar { ToolbarItem(placement: .confirmationAction) { Button("Done") { showingSettings = false } } }
             }
         }
         #else
         .sheet(isPresented: studyingToday) {
-            StudyView(decks: decks, title: String(localized: "Hoy"), context: context).frame(minWidth: 600, minHeight: 620)
+            StudyView(decks: decks, title: String(localized: "Today"), context: context).frame(minWidth: 600, minHeight: 620)
         }
         #endif
         .onChange(of: router.studySelectedDeck) { _, requested in
             // Nothing selected: nobody else will take the request.
             if requested && selection == nil { router.studySelectedDeck = false }
         }
-        .alert("Importado", isPresented: Binding(get: { importNote != nil }, set: { if !$0 { importNote = nil } })) {
+        .alert("Imported", isPresented: Binding(get: { importNote != nil }, set: { if !$0 { importNote = nil } })) {
             Button("OK", role: .cancel) {}
         } message: {
             Text(importNote ?? "")
         }
-        .alert("No se pudo importar", isPresented: Binding(get: { importError != nil }, set: { if !$0 { importError = nil } })) {
+        .alert("Could not import", isPresented: Binding(get: { importError != nil }, set: { if !$0 { importError = nil } })) {
             Button("OK", role: .cancel) {}
         } message: {
             Text(importError ?? "")
@@ -186,8 +186,8 @@ struct RootView: View {
         FolderSync.shared.scan()
         #endif
         let cards = result.decks.reduce(0) { $0 + $1.cards.count }
-        var note = String(localized: "\(url.lastPathComponent): \(result.decks.count) mazos, \(cards) tarjetas.")
-        if result.skipped > 0 { note += " " + String(localized: "\(result.skipped) notas sin frente o reverso no se importaron.") }
+        var note = String(localized: "\(url.lastPathComponent): \(result.decks.count) decks, \(cards) cards.")
+        if result.skipped > 0 { note += " " + String(localized: "\(result.skipped) notes without a front and back were skipped.") }
         return note
     }
 }
@@ -201,7 +201,7 @@ struct DeckRow: View {
         VStack(alignment: .leading, spacing: 4) {
             Text(deck.name).font(.headline)
             if counts.total == 0 {
-                Label("Al día · \(deck.allCards.count) tarjetas", systemImage: "checkmark.circle")
+                Label("All caught up · \(deck.allCards.count) cards", systemImage: "checkmark.circle")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
             } else {
@@ -232,12 +232,12 @@ struct DeckDetailView: View {
                 }
                 if !deck.language.isEmpty && !Speaker.hasNaturalVoice(for: deck.language) {
                     Section {
-                        Label("Para una pronunciación más natural, descarga una voz «Mejorada» o «Premium» en Ajustes › Accesibilidad › Contenido leído › Voces.", systemImage: "waveform")
+                        Label("For more natural pronunciation, download an Enhanced or Premium voice in Settings › Accessibility › Spoken Content › Voices.", systemImage: "waveform")
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                     }
                 }
-                Section("Tarjetas") {
+                Section("Cards") {
                     ForEach(filteredCards) { card in
                         Button {
                             inspected = card
@@ -249,21 +249,21 @@ struct DeckDetailView: View {
                 }
             }
         }
-        .searchable(text: $search, prompt: "Buscar tarjetas")
+        .searchable(text: $search, prompt: "Search cards")
         #if DEBUG
         .onAppear { if Demo.step == "card" { inspected = filteredCards.first } else if Demo.step != nil { studying = true } }
         #endif
         .navigationTitle(deck.name)
         .toolbar {
-            Menu("Opciones del mazo", systemImage: "ellipsis.circle") {
-                Toggle("Leer en voz alta", isOn: $autoSpeak)
-                Stepper("Nuevas por día: \(deck.newPerDay)", value: $deck.newPerDay, in: 0...200, step: 5)
+            Menu("Deck options", systemImage: "ellipsis.circle") {
+                Toggle("Read aloud", isOn: $autoSpeak)
+                Stepper("New per day: \(deck.newPerDay)", value: $deck.newPerDay, in: 0...200, step: 5)
                 Divider()
-                Button("Eliminar mazo…", systemImage: "trash", role: .destructive) { confirmDelete = true }
+                Button("Delete deck…", systemImage: "trash", role: .destructive) { confirmDelete = true }
             }
         }
-        .confirmationDialog("¿Eliminar «\(deck.name)» y todo su progreso?", isPresented: $confirmDelete, titleVisibility: .visible) {
-            Button("Eliminar", role: .destructive, action: onDelete)
+        .confirmationDialog("Delete “\(deck.name)” and all its progress?", isPresented: $confirmDelete, titleVisibility: .visible) {
+            Button("Delete", role: .destructive, action: onDelete)
         }
         .onChange(of: router.studySelectedDeck) { _, requested in
             guard requested else { return }
@@ -289,15 +289,15 @@ struct DeckDetailView: View {
                 Text(deck.details).foregroundStyle(.secondary)
             }
             HStack(spacing: 8) {
-                stat("Nuevas", counts.new, LittoStyle.new)
-                stat("Aprendiendo", counts.learning, LittoStyle.learning)
-                stat("Repasar", counts.review, LittoStyle.review)
+                stat("New cards", counts.new, LittoStyle.new)
+                stat("Learning", counts.learning, LittoStyle.learning)
+                stat("Review", counts.review, LittoStyle.review)
             }
             if counts.total > 0 {
                 Button {
                     studying = true
                 } label: {
-                    Text(minutes > 0 ? "Estudiar · \(minutes) min" : "Estudiar \(counts.total) tarjetas")
+                    Text(minutes > 0 ? "Study · \(minutes) min" : "Study \(counts.total) cards")
                         .font(.headline)
                         .frame(maxWidth: .infinity, minHeight: LittoStyle.minTarget)
                 }
@@ -306,15 +306,15 @@ struct DeckDetailView: View {
             } else {
                 Label {
                     if let next = deck.nextDue(after: now) {
-                        Text("Al día. Lo próximo vuelve \(next, format: .relative(presentation: .named)).")
+                        Text("All caught up. Next card \(next, format: .relative(presentation: .named)).")
                     } else {
-                        Text("No hay tarjetas pendientes.")
+                        Text("No cards due.")
                     }
                 } icon: {
                     Image(systemName: "checkmark.circle").foregroundStyle(LittoStyle.review)
                 }
             }
-            Text("Hoy: \(deck.reviewsToday(now: now)) repasos · \(deck.allCards.count) tarjetas en total")
+            Text("Today: \(deck.reviewsToday(now: now)) reviews · \(deck.allCards.count) cards in total")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }

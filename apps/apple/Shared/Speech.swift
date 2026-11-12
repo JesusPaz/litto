@@ -41,7 +41,7 @@ struct DictionaryButton: View {
     #endif
 
     var body: some View {
-        Button("Diccionario", systemImage: "character.book.closed") {
+        Button("Dictionary", systemImage: "character.book.closed") {
             #if os(iOS)
             showing = true
             #else

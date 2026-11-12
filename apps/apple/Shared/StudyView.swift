@@ -28,11 +28,11 @@ struct StudyView: View {
             #endif
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cerrar", systemImage: "xmark") { dismiss() }
+                    Button("Close", systemImage: "xmark") { dismiss() }
                         .keyboardShortcut(.cancelAction)
                 }
                 ToolbarItem(placement: .primaryAction) {
-                    Button("Deshacer", systemImage: "arrow.uturn.backward") { session.undo() }
+                    Button("Undo", systemImage: "arrow.uturn.backward") { session.undo() }
                         .disabled(!session.canUndo)
                         .keyboardShortcut("z", modifiers: .command)
                 }
@@ -72,8 +72,8 @@ struct StudyView: View {
                 .frame(maxWidth: LittoStyle.readableWidth)
             #if os(macOS)
             Text(session.showingAnswer
-                 ? "1–4 responder · S escuchar · E ejemplo · D diccionario · ⌘Z deshacer · Esc cerrar"
-                 : "Espacio mostrar respuesta · S escuchar · ⌘Z deshacer · Esc cerrar")
+                 ? "1–4 answer · S listen · E example · D dictionary · ⌘Z undo · Esc close"
+                 : "Space show answer · S listen · ⌘Z undo · Esc close")
                 .font(.caption)
                 .foregroundStyle(.secondary)
                 .padding(.bottom, 12)
@@ -94,7 +94,7 @@ struct StudyView: View {
                         .font(.title3)
                         .foregroundStyle(.secondary)
                 }
-                Button("Escuchar", systemImage: "speaker.wave.2") {
+                Button("Listen", systemImage: "speaker.wave.2") {
                     Speaker.shared.speak(card.front, language: session.language(of: card))
                 }
                 .labelStyle(.iconOnly)
@@ -138,7 +138,7 @@ struct StudyView: View {
                     HStack(alignment: .firstTextBaseline) {
                         Text(card.example).italic()
                         Spacer(minLength: 8)
-                        Button("Escuchar ejemplo", systemImage: "speaker.wave.2") {
+                        Button("Listen to example", systemImage: "speaker.wave.2") {
                             Speaker.shared.speak(card.example, language: session.language(of: card))
                         }
                         .labelStyle(.iconOnly)
@@ -189,14 +189,14 @@ struct StudyView: View {
                     .tint(grade.color)
                     .keyboardShortcut(KeyEquivalent(Character("\(grade.rawValue)")), modifiers: [])
                     .focusable(false) // Otherwise Space could press the last grade again.
-                    .accessibilityLabel("\(grade.title), vuelve en \(intervals[grade] ?? "")")
+                    .accessibilityLabel("\(grade.title), back in \(intervals[grade] ?? "")")
                 }
             }
         } else {
             Button {
                 reveal()
             } label: {
-                Text("Mostrar respuesta")
+                Text("Show answer")
                     .font(.headline)
                     .frame(maxWidth: .infinity, minHeight: LittoStyle.minTarget)
             }
@@ -211,23 +211,23 @@ struct StudyView: View {
         let left = session.leftToday
         let timeUp = session.ending == .timeUp
         return ContentUnavailableView {
-            Label(timeUp ? "Sesión cumplida" : "Al día", systemImage: "checkmark.circle")
+            Label(timeUp ? "Session done" : "All caught up", systemImage: "checkmark.circle")
         } description: {
             VStack(spacing: 8) {
                 Text(summary)
                 TreeTodayNote()
                 if left.counts.total > 0 {
-                    Text("Quedan \(left.counts.total) tarjetas (\(Minutes.text(left.estimate()))). Mañana siguen, sin prisa.")
+                    Text("\(left.counts.total) cards left (\(Minutes.text(left.estimate()))). They continue tomorrow, no rush.")
                 } else if let next = session.decksNextDue {
-                    Text("Lo próximo vuelve \(next, format: .relative(presentation: .named)).")
+                    Text("Next card \(next, format: .relative(presentation: .named)).")
                 }
             }
         } actions: {
-            Button("Terminar") { dismiss() }
+            Button("Finish") { dismiss() }
                 .buttonStyle(.borderedProminent)
                 .keyboardShortcut(.defaultAction)
             if timeUp && left.counts.total > 0 {
-                Button("5 minutos más") { session.extend() }
+                Button("5 more minutes") { session.extend() }
                     .keyboardShortcut("5", modifiers: [])
             }
         }
@@ -236,8 +236,8 @@ struct StudyView: View {
     private var summary: String {
         let minutes = Minutes.text(session.elapsed())
         return session.newCount > 0
-            ? String(localized: "\(minutes) · \(session.reviewedCount) respuestas, \(session.newCount) nuevas.")
-            : String(localized: "\(minutes) · \(session.reviewedCount) respuestas.")
+            ? String(localized: "\(minutes) · \(session.reviewedCount) answers, \(session.newCount) new.")
+            : String(localized: "\(minutes) · \(session.reviewedCount) answers.")
     }
 
     private func reveal() {
@@ -262,7 +262,7 @@ private struct SessionHeader: View {
                     CountsLine(counts: session.counts)
                     Spacer(minLength: 8)
                     if let remaining = session.remaining(at: timeline.date) {
-                        Text(remaining > 60 ? "quedan \(Int((remaining / 60).rounded(.up))) min" : "último minuto")
+                        Text(remaining > 60 ? "\(Int((remaining / 60).rounded(.up))) min left" : "last minute")
                             .font(.subheadline)
                             .monospacedDigit()
                             .foregroundStyle(.secondary)
@@ -270,7 +270,7 @@ private struct SessionHeader: View {
                 }
                 if let limit = session.limit {
                     ProgressView(value: min(session.elapsed(at: timeline.date), limit), total: limit)
-                        .accessibilityLabel("Tiempo de la sesión")
+                        .accessibilityLabel("Session time")
                 }
             }
         }

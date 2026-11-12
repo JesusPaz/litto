@@ -1,6 +1,6 @@
 name: Litto
 options:
-  developmentLanguage: es
+  developmentLanguage: en
   bundleIdPrefix: com.jesuspaz.litto
   deploymentTarget:
     macOS: '15.0'

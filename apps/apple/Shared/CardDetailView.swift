@@ -21,7 +21,7 @@ struct CardDetailView: View {
                         HStack(alignment: .firstTextBaseline) {
                             Text(card.front).font(.title2.weight(.semibold)).textSelection(.enabled)
                             Spacer()
-                            Button("Escuchar", systemImage: "speaker.wave.2") {
+                            Button("Listen", systemImage: "speaker.wave.2") {
                                 Speaker.shared.speak(card.front, language: language)
                             }
                             .labelStyle(.iconOnly)
@@ -32,10 +32,10 @@ struct CardDetailView: View {
                             Text(card.pronunciation).foregroundStyle(.secondary)
                         }
                     }
-                    LabeledContent("Significado", value: card.back)
-                    if !card.definition.isEmpty { LabeledContent("Definición", value: card.definition) }
+                    LabeledContent("Meaning", value: card.back)
+                    if !card.definition.isEmpty { LabeledContent("Definition", value: card.definition) }
                     if !card.example.isEmpty {
-                        LabeledContent("Ejemplo") {
+                        LabeledContent("Example") {
                             VStack(alignment: .trailing) {
                                 Text(card.example).italic()
                                 if !card.exampleTranslation.isEmpty { Text(card.exampleTranslation).foregroundStyle(.secondary) }
@@ -43,19 +43,19 @@ struct CardDetailView: View {
                             .multilineTextAlignment(.trailing)
                         }
                     }
-                    if !card.notes.isEmpty { LabeledContent("Notas", value: card.notes) }
+                    if !card.notes.isEmpty { LabeledContent("Notes", value: card.notes) }
                     DictionaryButton(term: card.front)
                 }
 
-                Section("Imagen") {
+                Section("Image") {
                     if let data = card.imageData {
                         CardImage(data: data, maxHeight: 220)
                             .frame(maxWidth: .infinity)
                     }
-                    PhotosPicker(card.imageData == nil ? "Elegir foto…" : "Cambiar foto…", selection: $photo, matching: .images)
-                    Button("Elegir archivo…") { choosingFile = true }
+                    PhotosPicker(card.imageData == nil ? "Choose photo…" : "Change photo…", selection: $photo, matching: .images)
+                    Button("Choose file…") { choosingFile = true }
                     if card.imageData != nil {
-                        Button("Quitar imagen", role: .destructive) { setImage(nil) }
+                        Button("Remove image", role: .destructive) { setImage(nil) }
                     }
                     if let imageError {
                         Label(imageError, systemImage: "exclamationmark.circle")
@@ -63,12 +63,12 @@ struct CardDetailView: View {
                     }
                 }
 
-                Section("Progreso") {
-                    LabeledContent("Estado") { StateLabel(card: card, now: Date()) }
-                    LabeledContent("Repasos", value: "\(card.reps)")
-                    LabeledContent("Olvidos", value: "\(card.lapses)")
+                Section("Progress") {
+                    LabeledContent("Status") { StateLabel(card: card, now: Date()) }
+                    LabeledContent("Reviews", value: "\(card.reps)")
+                    LabeledContent("Lapses", value: "\(card.lapses)")
                     if let last = card.lastReview {
-                        LabeledContent("Último repaso") { Text(last, format: .relative(presentation: .named)) }
+                        LabeledContent("Last review") { Text(last, format: .relative(presentation: .named)) }
                     }
                 }
             }
@@ -79,7 +79,7 @@ struct CardDetailView: View {
             #endif
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Listo") { dismiss() }
+                    Button("Done") { dismiss() }
                 }
             }
         }
@@ -115,7 +115,7 @@ struct CardDetailView: View {
             card.imageSource = "user"
             try context.save()
         } catch {
-            imageError = String(localized: "No se pudo usar esa imagen.")
+            imageError = String(localized: "That image could not be used.")
         }
     }
 }

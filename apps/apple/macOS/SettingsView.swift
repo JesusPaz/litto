@@ -15,14 +15,14 @@ struct SettingsView: View {
         Form {
             Section("Claude") {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Para que Claude cree y corrija tus mazos, ejecuta esto una vez en la terminal:")
+                    Text("So Claude can create and fix your decks, run this once in Terminal:")
                     Text(Self.mcpCommand)
                         .font(.callout.monospaced())
                         .textSelection(.enabled)
                         .padding(8)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(.background.secondary, in: RoundedRectangle(cornerRadius: 8))
-                    Button(copied ? "Copiado" : "Copiar comando", systemImage: copied ? "checkmark" : "doc.on.doc") {
+                    Button(copied ? "Copied" : "Copy command", systemImage: copied ? "checkmark" : "doc.on.doc") {
                         NSPasteboard.general.clearContents()
                         NSPasteboard.general.setString(Self.mcpCommand, forType: .string)
                         copied = true
@@ -30,11 +30,11 @@ struct SettingsView: View {
                 }
             }
             StudySettingsSection()
-            Section("Carpeta compartida") {
-                LabeledContent("Mazos e imágenes") {
+            Section("Shared folder") {
+                LabeledContent("Decks and images") {
                     HStack {
                         Text(folder.path).textSelection(.enabled).lineLimit(1).truncationMode(.middle)
-                        Button("Mostrar") { NSWorkspace.shared.open(folder) }
+                        Button("Show") { NSWorkspace.shared.open(folder) }
                     }
                 }
                 if let error = FolderSync.shared.lastError {
