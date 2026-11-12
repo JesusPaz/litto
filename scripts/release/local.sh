@@ -17,16 +17,21 @@ common=(-project apps/apple/Litto.xcodeproj -configuration Release -derivedDataP
 echo "Litto $tag, build $build, source $(git rev-parse HEAD)"
 
 if [[ "$platform" != ios ]]; then
+    # Developer ID (GitHub, Homebrew): not sandboxed. The Mac App Store build is a separate archive.
     xcodebuild "${common[@]}" -scheme LittoMac -destination 'generic/platform=macOS' -archivePath "$work/mac.xcarchive" \
-        'ARCHS=arm64 x86_64' ONLY_ACTIVE_ARCH=NO archive -quiet
+        'ARCHS=arm64 x86_64' ONLY_ACTIVE_ARCH=NO LITTO_DISTRIBUTION=direct ENABLE_APP_SANDBOX=NO archive -quiet
     python3 scripts/release/export-options.py mac upload "$work/mac.plist"
     xcodebuild -exportArchive -archivePath "$work/mac.xcarchive" -exportPath "$work/mac-upload" \
         -exportOptionsPlist "$work/mac.plist" -allowProvisioningUpdates -quiet
-    # The same archive, re-signed for the Mac App Store and uploaded to App Store Connect.
+    xcodebuild "${common[@]}" -scheme LittoMac -destination 'generic/platform=macOS' -archivePath "$work/macstore.xcarchive" \
+        'ARCHS=arm64 x86_64' ONLY_ACTIVE_ARCH=NO archive -quiet
     python3 scripts/release/export-options.py macstore upload "$work/macstore.plist"
-    xcodebuild -exportArchive -archivePath "$work/mac.xcarchive" -exportPath "$work/macstore-upload" \
-        -exportOptionsPlist "$work/macstore.plist" -allowProvisioningUpdates -quiet
-    echo "Uploaded Mac build $build to App Store Connect."
+    if xcodebuild -exportArchive -archivePath "$work/macstore.xcarchive" -exportPath "$work/macstore-upload" \
+        -exportOptionsPlist "$work/macstore.plist" -allowProvisioningUpdates -quiet; then
+        echo "Uploaded Mac build $build to App Store Connect."
+    else
+        echo "Mac App Store upload failed (does the com.jesuspaz.litto.mac record exist?); continuing." >&2
+    fi
     echo 'Waiting for notarization…'
     for _ in $(seq 1 60); do
         if xcodebuild -exportNotarizedApp -archivePath "$work/mac.xcarchive" -exportPath "$work/mac" >/dev/null 2>&1; then break; fi
