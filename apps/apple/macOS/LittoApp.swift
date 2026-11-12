@@ -7,6 +7,9 @@ struct LittoApp: App {
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
+        #if DEBUG
+        Store.initializeCloudKitSchemaIfRequested()
+        #endif
         container = Store.makeContainer()
         Reminder.shared.activate()
         FolderSync.shared.start(context: container.mainContext)
