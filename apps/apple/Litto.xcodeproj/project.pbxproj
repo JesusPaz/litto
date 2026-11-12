@@ -313,7 +313,7 @@
 				};
 			};
 			buildConfigurationList = 2B197994989E7A6F161653FB /* Build configuration list for PBXProject "Litto" */;
-			developmentRegion = es;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				Base,

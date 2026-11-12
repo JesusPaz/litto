@@ -20,11 +20,11 @@ enum LittoStyle {
     static let minTarget: CGFloat = 44
 }
 
-/// Durations the way people say them: "8 min", "1 h 20 min", "menos de 1 min".
+/// Durations the way people say them: "8 min", "1 h 20 min", "under 1 min".
 enum Minutes {
     static func text(_ seconds: TimeInterval) -> String {
         let minutes = Int((seconds / 60).rounded())
-        if minutes < 1 { return String(localized: "menos de 1 min") }
+        if minutes < 1 { return String(localized: "under 1 min") }
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute]
         formatter.unitsStyle = .short
@@ -50,9 +50,9 @@ struct CountsLine: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            item(counts.new, "nuevas", LittoStyle.new)
-            item(counts.learning, "aprendiendo", LittoStyle.learning)
-            item(counts.review, "repasar", LittoStyle.review)
+            item(counts.new, "new", LittoStyle.new)
+            item(counts.learning, "learning", LittoStyle.learning)
+            item(counts.review, "review", LittoStyle.review)
         }
         .font(.subheadline)
         .accessibilityElement(children: .combine)
@@ -73,11 +73,11 @@ struct StateLabel: View {
     var body: some View {
         switch card.state {
         case .new:
-            Text("Nueva").foregroundStyle(LittoStyle.new)
+            Text("New").foregroundStyle(LittoStyle.new)
         case .learning, .relearning:
-            Text("Aprendiendo").foregroundStyle(LittoStyle.learning)
+            Text("Learning").foregroundStyle(LittoStyle.learning)
         case .review:
-            Text(card.due <= now ? "Hoy" : "En \(Interval.short(from: now, to: card.due))")
+            Text(card.due <= now ? "Today" : "In \(Interval.short(from: now, to: card.due))")
                 .foregroundStyle(.secondary)
         }
     }
@@ -114,10 +114,10 @@ extension Image {
 extension Grade {
     var title: String {
         switch self {
-        case .again: String(localized: "Otra vez")
-        case .hard: String(localized: "Difícil")
-        case .good: String(localized: "Bien")
-        case .easy: String(localized: "Fácil")
+        case .again: String(localized: "Again")
+        case .hard: String(localized: "Hard")
+        case .good: String(localized: "Good")
+        case .easy: String(localized: "Easy")
         }
     }
 

@@ -30,8 +30,8 @@ final class Reminder: NSObject, UNUserNotificationCenterDelegate {
         denied = !granted
         guard granted else { return }
         let content = UNMutableNotificationContent()
-        content.title = minutes > 0 ? String(localized: "Tu repaso de \(minutes) minutos") : String(localized: "Tu repaso de hoy")
-        content.body = String(localized: "Las palabras que tocan hoy y unas cuantas nuevas.")
+        content.title = minutes > 0 ? String(localized: "Your \(minutes)-minute review") : String(localized: "Your review for today")
+        content.body = String(localized: "Today's words and a few new ones.")
         content.sound = .default
         var when = DateComponents()
         when.hour = Int(time) / 3600
@@ -59,23 +59,23 @@ struct StudySettingsSection: View {
 
     var body: some View {
         Section {
-            Picker("Duración de la sesión", selection: $minutes) {
+            Picker("Session length", selection: $minutes) {
                 ForEach(StudySettings.minuteChoices, id: \.self) { Text("\($0) min").tag($0) }
-                Text("Sin límite").tag(0)
+                Text("No limit").tag(0)
             }
-            Toggle("Recordatorio diario", isOn: $reminderOn)
+            Toggle("Daily reminder", isOn: $reminderOn)
             if reminderOn {
-                DatePicker("Hora", selection: timeBinding, displayedComponents: .hourAndMinute)
+                DatePicker("Time", selection: timeBinding, displayedComponents: .hourAndMinute)
                 if Reminder.shared.denied {
-                    Label("Activa las notificaciones de Litto en Ajustes del sistema.", systemImage: "bell.slash")
+                    Label("Turn on notifications for Litto in System Settings.", systemImage: "bell.slash")
                         .foregroundStyle(LittoStyle.danger)
                 }
             }
-            Toggle("Leer la palabra en voz alta al mostrarla", isOn: $autoSpeak)
+            Toggle("Read the word aloud when it appears", isOn: $autoSpeak)
         } header: {
-            Text("Estudio")
+            Text("Study")
         } footer: {
-            Text("La sesión termina cuando se acaba el tiempo. Primero van los repasos pendientes y las palabras nuevas llenan el tiempo que sobra; lo que no alcance queda para mañana.")
+            Text("The session ends when the time is up. Due reviews come first and new words fill the time that is left; whatever does not fit waits for tomorrow.")
         }
         .task(id: "\(reminderOn)-\(reminderTime)-\(minutes)") {
             await Reminder.shared.update(enabled: reminderOn, time: reminderTime, minutes: minutes)
@@ -104,9 +104,9 @@ struct TodayCard: View {
         let pile = DuePile(decks: decks, now: now)
         let estimate = pile.estimate()
         VStack(alignment: .leading, spacing: 12) {
-            Text("Hoy").font(.headline)
+            Text("Today").font(.headline)
             if pile.counts.total == 0 {
-                Label("Al día", systemImage: "checkmark.circle")
+                Label("All caught up", systemImage: "checkmark.circle")
                     .foregroundStyle(.secondary)
             } else {
                 CountsLine(counts: pile.counts)
@@ -115,13 +115,13 @@ struct TodayCard: View {
                     .foregroundStyle(.secondary)
                     .lineLimit(2...4)
                 Button(action: onStart) {
-                    Text(minutes > 0 ? "Empezar · \(minutes) min" : "Empezar")
+                    Text(minutes > 0 ? "Start · \(minutes) min" : "Start")
                         .font(.headline)
                         .frame(maxWidth: .infinity, minHeight: LittoStyle.minTarget)
                 }
                 .buttonStyle(.borderedProminent)
                 .buttonBorderShape(.roundedRectangle(radius: 12))
-                Button("Ver palabras de hoy") { router.showTodayWords = true }
+                Button("See today's words") { router.showTodayWords = true }
                     .buttonStyle(.borderless)
                     .font(.subheadline)
             }
@@ -132,8 +132,8 @@ struct TodayCard: View {
 
     private func detail(estimate: TimeInterval) -> String {
         let total = Minutes.text(estimate)
-        guard minutes > 0, estimate > TimeInterval(minutes * 60) else { return String(localized: "Pendiente: \(total).") }
-        return String(localized: "Pendiente: \(total). Hoy \(minutes) min; el resto, otro día.")
+        guard minutes > 0, estimate > TimeInterval(minutes * 60) else { return String(localized: "Due: \(total).") }
+        return String(localized: "Due: \(total). Today \(minutes) min; the rest another day.")
     }
 }
 
@@ -150,16 +150,16 @@ struct PendingWordsView: View {
         let new = pile.cards.filter { $0.state == .new }
         NavigationStack {
             List {
-                section("Aprendiendo", learning, now: now)
-                section("Para repasar", reviews, now: now)
-                section("Nuevas de hoy", new, now: now)
+                section("Learning", learning, now: now)
+                section("To review", reviews, now: now)
+                section("New today", new, now: now)
             }
-            .navigationTitle("Palabras de hoy")
+            .navigationTitle("Today's words")
             #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
             #endif
             .toolbar {
-                ToolbarItem(placement: .confirmationAction) { Button("Listo") { dismiss() } }
+                ToolbarItem(placement: .confirmationAction) { Button("Done") { dismiss() } }
             }
         }
         #if os(macOS)

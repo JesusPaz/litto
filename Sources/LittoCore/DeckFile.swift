@@ -88,7 +88,7 @@ extension DeckFile {
         !id.isEmpty && id.count <= 80 && id.allSatisfy { ("a"..."z").contains($0) || ("0"..."9").contains($0) || $0 == "-" }
     }
 
-    /// Turns "Inglés de negocios" into "ingles-de-negocios".
+    /// Turns "Business Café" into "business-cafe".
     public static func slug(_ text: String) -> String {
         let folded = text.folding(options: [.diacriticInsensitive, .caseInsensitive], locale: nil).lowercased()
         var out = ""
