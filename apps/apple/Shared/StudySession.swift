@@ -9,6 +9,8 @@ enum StudySettings {
     static let paceKey = "secondsPerAnswer"
     static let defaultMinutes = 10
     static let minuteChoices = [5, 10, 15, 20, 30]
+    /// Offered on the home screen for a quick session.
+    static let quickChoices = [5, 10, 15]
 
     /// nil = no limit.
     static var limit: TimeInterval? {
@@ -60,12 +62,17 @@ final class StudySession {
     private(set) var ending: Ending?
     private(set) var reviewedCount = 0
     private(set) var newCount = 0
+    /// Words that left the learning steps in this session.
+    private(set) var learnedCount = 0
+    /// Answers in a row without "Forgot"; the session's best.
+    private(set) var combo = 0
+    private(set) var bestCombo = 0
     var showingAnswer = false
 
     private var plannedNew = 0
     private var reviewsSinceNew = 0
     private var pile: [StudyCard] = []
-    private var undoStack: [(card: StudyCard, memory: MemoryRecord, entry: ReviewEntry, wasNew: Bool)] = []
+    private var undoStack: [(card: StudyCard, memory: MemoryRecord, entry: ReviewEntry, wasNew: Bool, learned: Bool, combo: Int, reviewsSinceNew: Int)] = []
 
     /// Active time only: the clock stops while the app is in the background.
     private var accumulated: TimeInterval = 0
@@ -115,14 +122,17 @@ final class StudySession {
         runningSince = Date()
     }
 
-    func intervals() -> [Grade: String] {
-        guard let current else { return [:] }
+    /// The answers that fit the current card, with when each one brings it back.
+    func choices() -> [(recall: Recall, back: String)] {
+        guard let current else { return [] }
         let now = Date()
-        return scheduler.preview(current.memory, at: now).mapValues { Interval.short(from: now, to: $0) }
+        let due = scheduler.preview(current.memory, at: now)
+        return Recall.choices(for: current.state).map { ($0, Interval.short(from: now, to: due[$0.grade] ?? now)) }
     }
 
-    func answer(_ grade: Grade) {
-        guard let card = current, showingAnswer else { return }
+    func answer(_ recall: Recall) {
+        guard let card = current, showingAnswer, Recall.choices(for: card.state).contains(recall) else { return }
+        let grade = recall.grade
         let now = Date()
         let before = card.memory
         let wasNew = before.state == .new
@@ -131,8 +141,12 @@ final class StudySession {
         context.insert(entry)
         entry.card = card
         try? context.save()
-        undoStack.append((card, before, entry, wasNew))
+        let learned = before.state != .review && before.state != .relearning && card.state == .review
+        undoStack.append((card, before, entry, wasNew, learned, combo, reviewsSinceNew))
         reviewedCount += 1
+        if learned { learnedCount += 1 }
+        combo = grade == .again ? 0 : combo + 1
+        bestCombo = max(bestCombo, combo)
         if wasNew {
             newCount += 1
             reviewsSinceNew = 0
@@ -149,6 +163,9 @@ final class StudySession {
         try? context.save()
         reviewedCount -= 1
         if last.wasNew { newCount -= 1 }
+        if last.learned { learnedCount -= 1 }
+        combo = last.combo
+        reviewsSinceNew = last.reviewsSinceNew
         ending = nil
         resume()
         current = last.card

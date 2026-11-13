@@ -8,9 +8,9 @@ Native SwiftUI apps, FSRS-6 scheduling, iCloud sync, and an MCP server so Claude
 
 ## What it does
 
-- **Anki-style reviews with FSRS-6** ([swift-fsrs](https://github.com/open-spaced-repetition/swift-fsrs)). Answer *Again / Hard / Good / Easy*; each button shows when the card comes back. Daily new-card limit, study day starting at 4 AM, 1 min / 10 min learning steps, undo.
-- **A tree that grows while you study.** Litto means "little tree". Each day with at least 10 answers it grows a little, and a streak makes it grow faster, up to twice as fast after 30 days in a row. It gains a ring every 7 study days and takes years to become a giant like a redwood. Days away dry it out, but it never shrinks: one session starts bringing it back. It is computed from the reviews, so it is the same on iPhone and Mac.
-- **Short daily sessions.** Pick 5, 10, 15, 20 or 30 minutes and an hour for the daily reminder. The session ends on time, not when the pile runs out: due reviews come first, new words only fill the time they leave, and whatever does not fit waits for tomorrow. After a few days away you catch up in daily sessions of the same length instead of facing an hour-long backlog. "Today" shows what is due across all decks, how long all of it would take, and the words themselves.
+- **Anki-style reviews with FSRS-6** ([swift-fsrs](https://github.com/open-spaced-repetition/swift-fsrs)). After the answer, Litto asks one plain question and only offers the buttons that fit the card: a new word is *New to me* or *I knew it* (it skips the learning steps); a word you are learning is *Forgot* or *Got it*; a review adds *Hard to recall*. Each button shows when the card comes back. Daily new-card limit, study day starting at 4 AM, 1 min / 10 min learning steps, undo.
+- **A tree that grows while you study.** Litto means "little tree". Each day with at least 10 answers it grows a little, a streak makes it grow faster (up to twice as fast after 30 days in a row), and every word you learn adds a bit more. The home screen shows the streak as a flame with this week's days, today's goal and how close the tree is to its next stage; a session shows your run of correct answers in a row and ends with what you earned. It gains a ring every 7 study days and takes years to become a giant like a redwood. Days away dry it out, but it never shrinks: one session starts bringing it back. It is computed from the reviews, so it is the same on iPhone and Mac.
+- **Short daily sessions.** Start a quick 5, 10 or 15 minute session from the home screen, or set your usual length (up to 30 minutes) and an hour for the daily reminder. The session ends on time, not when the pile runs out: due reviews come first, new words only fill the time they leave, and whatever does not fit waits for tomorrow. After a few days away you catch up in daily sessions of the same length instead of facing an hour-long backlog. "Today" shows what is due across all decks, how long all of it would take, and the words themselves.
 - **Imports Anki decks** (`.apkg` / `.colpkg`, old and new Anki formats): one card per note and one deck per top-level Anki deck. Fields are matched by name (word, meaning, IPA, example, image…); cloze notes become fill-in-the-gap cards. Anki sounds are dropped in favour of Apple voices, and cards start as new.
 - **Rich cards**: word, meaning, IPA, definition, example with translation, notes and an image.
 - **Pronunciation with Apple voices**, offline. Litto picks the best installed voice (Premium, then Enhanced). The system dictionary is one tap away.
@@ -26,7 +26,7 @@ Native SwiftUI apps, FSRS-6 scheduling, iCloud sync, and an MCP server so Claude
 | ⌘L | Today's words |
 | ⌘O | Import an Anki deck or JSON |
 | Space | Show the answer |
-| 1 2 3 4 | Again, Hard, Good, Easy |
+| 1 2 3 | The answer buttons, left to right |
 | S / E / D | Hear the word / hear the example / open the dictionary |
 | ⌘Z | Undo the last answer |
 | 5 | Five more minutes, when the time is up |

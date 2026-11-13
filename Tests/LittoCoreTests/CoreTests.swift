@@ -278,9 +278,43 @@ import Testing
         #expect(back.health == .healthy && back.streak == 1)
     }
 
+    @Test func learnedWordsGrowIt() {
+        let plain = Tree.grow(answersByDay: days(0..<5), now: day(4), calendar: calendar)
+        let words = Tree.grow(answersByDay: days(0..<5), learnedWords: 100, now: day(4), calendar: calendar)
+        #expect(words.growth == plain.growth + 30)
+        #expect(words.heightMeters > plain.heightMeters)
+    }
+
+    @Test func stageProgressAndWeek() {
+        let tree = Tree.grow(answersByDay: days([0, 2, 3]).merging([day(4): 6]) { $1 }, now: day(4), calendar: calendar)
+        #expect(tree.week == [false, false, true, false, true, true, false], "today has only 6 answers")
+        #expect(tree.answersToday == 6)
+        #expect(tree.nextStage == .sapling)
+        #expect((0...1).contains(tree.stageProgress))
+        #expect(Tree.stage(for: 0.05) == .seed && Tree.stage(for: 0.5) == .sapling && Tree.stage(for: 150) == .sequoia)
+    }
+
     @Test func becomesAGiantAfterYears() {
         let tree = Tree.grow(answersByDay: days(0..<(3 * 365)), now: day(3 * 365 - 1), calendar: calendar)
         #expect(tree.stage == .giant)
         #expect(tree.heightMeters < Tree.maxHeight)
     }
 }
+
+@Suite struct RecallTests {
+    @Test func choicesFitTheCard() {
+        #expect(Recall.choices(for: .new) == [.newToMe, .alreadyKnew])
+        #expect(Recall.choices(for: .learning) == [.forgot, .remembered])
+        #expect(Recall.choices(for: .review) == [.forgot, .struggled, .remembered])
+    }
+
+    @Test func aKnownNewWordSkipsTheSteps() {
+        let now = Date(timeIntervalSince1970: 1_800_000_000)
+        let scheduler = Scheduler()
+        let known = scheduler.next(.new(at: now), grade: Recall.alreadyKnew.grade, at: now)
+        let fresh = scheduler.next(.new(at: now), grade: Recall.newToMe.grade, at: now)
+        #expect(known.due.timeIntervalSince(now) >= 86400)
+        #expect(fresh.due.timeIntervalSince(now) < 3600)
+    }
+}
+

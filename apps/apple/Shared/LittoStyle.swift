@@ -111,22 +111,28 @@ extension Image {
 }
 #endif
 
-extension Grade {
+extension Recall {
     var title: String {
         switch self {
-        case .again: String(localized: "Again")
-        case .hard: String(localized: "Hard")
-        case .good: String(localized: "Good")
-        case .easy: String(localized: "Easy")
+        case .newToMe: String(localized: "New to me")
+        case .alreadyKnew: String(localized: "I knew it")
+        case .forgot: String(localized: "Forgot")
+        case .struggled: String(localized: "Hard to recall")
+        case .remembered: String(localized: "Got it")
         }
     }
 
     var color: Color {
         switch self {
-        case .again: LittoStyle.danger
-        case .hard: LittoStyle.learning
-        case .good: LittoStyle.review
-        case .easy: LittoStyle.new
+        case .newToMe: LittoStyle.new
+        case .alreadyKnew, .remembered: LittoStyle.review
+        case .forgot: LittoStyle.danger
+        case .struggled: LittoStyle.learning
         }
+    }
+
+    /// The question the buttons answer, for a card in this state.
+    static func question(for state: MemoryState) -> String {
+        state == .new ? String(localized: "Did you know this word?") : String(localized: "Did you remember it?")
     }
 }

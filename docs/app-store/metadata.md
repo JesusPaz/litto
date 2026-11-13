@@ -37,7 +37,7 @@ SHORT DAILY SESSIONS
 Pick 5, 10, 15, 20 or 30 minutes. The session ends on time, not when the pile runs out: due reviews come first, new words fill the time they leave, and the rest waits for tomorrow. After a few days away you catch up in sessions of the same length instead of facing an hour-long backlog. A daily reminder brings you back.
 
 A TREE THAT GROWS WHILE YOU STUDY
-Litto means "little tree". Each day you study, it grows; a streak makes it grow faster. Days away dry it out, but it never shrinks.
+Litto means "little tree". Each day you study, it grows; a streak makes it grow faster, and every word you learn adds more. Days away dry it out, but it never shrinks.
 
 RICH CARDS
 Word, meaning, pronunciation (IPA), definition, an example with its translation, notes and an image. Hear the word and the example with Apple's voices, offline, and open the system dictionary with one tap.
@@ -75,7 +75,7 @@ SESIONES CORTAS CADA DÍA
 Elige 5, 10, 15, 20 o 30 minutos. La sesión termina a tiempo, no cuando se acaba la pila: primero lo que toca repasar, las palabras nuevas llenan el tiempo que queda y lo demás espera a mañana. Si faltas unos días, te pones al día en sesiones de la misma duración en vez de encontrarte una hora de atraso. Un recordatorio diario te ayuda a volver.
 
 UN ÁRBOL QUE CRECE MIENTRAS ESTUDIAS
-Litto significa «arbolito». Cada día que estudias crece, y la racha lo hace crecer más rápido. Los días sin estudiar lo secan, pero nunca se encoge.
+Litto significa «arbolito». Cada día que estudias crece, la racha lo hace crecer más rápido y cada palabra que aprendes le suma. Los días sin estudiar lo secan, pero nunca se encoge.
 
 TARJETAS COMPLETAS
 Palabra, significado, pronunciación (AFI), definición, un ejemplo con su traducción, notas e imagen. Escucha la palabra y el ejemplo con las voces de Apple, sin conexión, y abre el diccionario del sistema con un toque.

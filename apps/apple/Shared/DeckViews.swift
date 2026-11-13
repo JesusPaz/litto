@@ -30,7 +30,10 @@ struct RootView: View {
                             TreeCard(now: timeline.date)
                         }
                         Section {
-                            TodayCard(decks: decks, now: timeline.date) { router.startToday = true }
+                            TodayCard(decks: decks, now: timeline.date) { minutes in
+                                router.todayMinutes = minutes
+                                router.startToday = true
+                            }
                         }
                     }
                     ForEach(decks) { deck in
@@ -87,7 +90,7 @@ struct RootView: View {
             Task { await importFiles(result) }
         }
         #if os(iOS)
-        .fullScreenCover(isPresented: studyingToday) { StudyView(decks: decks, title: String(localized: "Today"), context: context) }
+        .fullScreenCover(isPresented: studyingToday) { StudyView(decks: decks, title: String(localized: "Today"), context: context, minutes: router.todayMinutes) }
         .sheet(isPresented: $showingSettings) {
             NavigationStack {
                 Form { StudySettingsSection() }
@@ -98,7 +101,7 @@ struct RootView: View {
         }
         #else
         .sheet(isPresented: studyingToday) {
-            StudyView(decks: decks, title: String(localized: "Today"), context: context).frame(minWidth: 600, minHeight: 620)
+            StudyView(decks: decks, title: String(localized: "Today"), context: context, minutes: router.todayMinutes).frame(minWidth: 600, minHeight: 620)
         }
         #endif
         .onChange(of: router.studySelectedDeck) { _, requested in
@@ -119,7 +122,10 @@ struct RootView: View {
 
     /// Today's session is open while there are decks to study.
     private var studyingToday: Binding<Bool> {
-        Binding { router.startToday && !decks.isEmpty } set: { router.startToday = $0 }
+        Binding { router.startToday && !decks.isEmpty } set: {
+            router.startToday = $0
+            if !$0 { router.todayMinutes = nil }
+        }
     }
 
     private func delete(_ deck: Deck) {

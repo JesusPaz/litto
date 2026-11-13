@@ -3,25 +3,14 @@ import SwiftData
 import SwiftUI
 
 extension Tree {
-    /// Built from every answer ever given, so it follows the reviews through iCloud.
-    static func current(from reviews: [ReviewEntry], now: Date = Date()) -> Tree {
+    /// Built from every answer ever given and the words learned, so it follows the reviews through iCloud.
+    static func current(from reviews: [ReviewEntry], learnedWords: Int, now: Date = Date()) -> Tree {
         var answersByDay: [Date: Int] = [:]
         for review in reviews { answersByDay[StudyDay.start(of: review.date), default: 0] += 1 }
-        return grow(answersByDay: answersByDay, now: now)
+        return grow(answersByDay: answersByDay, learnedWords: learnedWords, now: now)
     }
 
-    var stageName: String {
-        switch stage {
-        case .seed: String(localized: "Seed")
-        case .sprout: String(localized: "Sprout")
-        case .sapling: String(localized: "Sapling")
-        case .young: String(localized: "Young tree")
-        case .tree: String(localized: "Tree")
-        case .great: String(localized: "Great tree")
-        case .giant: String(localized: "Giant tree")
-        case .sequoia: String(localized: "Giant sequoia")
-        }
-    }
+    var stageName: String { stage.name }
 
     var healthText: String {
         switch health {
@@ -47,37 +36,154 @@ extension Tree {
     }
 }
 
-/// The tree on the home screen: drawing, size, rings, streak and how it is doing.
+extension Tree.Stage {
+    var name: String {
+        switch self {
+        case .seed: String(localized: "Seed")
+        case .sprout: String(localized: "Sprout")
+        case .sapling: String(localized: "Sapling")
+        case .young: String(localized: "Young tree")
+        case .tree: String(localized: "Tree")
+        case .great: String(localized: "Great tree")
+        case .giant: String(localized: "Giant tree")
+        case .sequoia: String(localized: "Giant sequoia")
+        }
+    }
+}
+
+/// Cards that have left the learning steps: review, or relearning after a lapse.
+private let learnedFilter = #Predicate<StudyCard> { $0.stateRaw >= 2 }
+
+/// The tree on the home screen: drawing, stage and the way to the next one, words learned,
+/// the streak with this week's days, and today's goal.
 struct TreeCard: View {
     @Query private var reviews: [ReviewEntry]
+    @Query(filter: learnedFilter) private var learned: [StudyCard]
     let now: Date
 
     var body: some View {
-        let tree = Tree.current(from: reviews, now: now)
-        HStack(alignment: .center, spacing: 16) {
-            TreeDrawing(tree: tree)
-                .frame(width: 72, height: 96)
-                .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: 4) {
-                Text(tree.stageName).font(.headline)
-                Text("\(tree.heightText) · \(tree.rings) rings")
-                    .font(.subheadline)
-                    .monospacedDigit()
-                    .foregroundStyle(.secondary)
-                if tree.streak > 0 {
-                    Text("\(tree.streak)-day streak · grows ×\(tree.nextDayMultiplier.formatted(.number.precision(.fractionLength(1))))")
+        let tree = Tree.current(from: reviews, learnedWords: learned.count, now: now)
+        VStack(alignment: .leading, spacing: 16) {
+            HStack(alignment: .center, spacing: 16) {
+                TreeDrawing(tree: tree)
+                    .frame(width: 72, height: 96)
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(tree.stageName).font(.headline)
+                    Text("\(tree.heightText) · \(tree.learnedWords) words learned")
                         .font(.subheadline)
+                        .monospacedDigit()
+                        .foregroundStyle(.secondary)
+                    if let next = tree.nextStage {
+                        ProgressView(value: tree.stageProgress)
+                            .tint(LittoStyle.review)
+                            .accessibilityLabel("Growing into \(next.name)")
+                        Text("Next: \(next.name)")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    Text(tree.healthText)
+                        .font(.footnote)
+                        .foregroundStyle(tree.health == .healthy ? Color.secondary : LittoStyle.learning)
+                        .lineLimit(2...4)
+                }
+            }
+            .accessibilityElement(children: .combine)
+            StreakView(tree: tree, now: now)
+        }
+        .padding(.vertical, 8)
+    }
+}
+
+/// The streak as a flame and a number, this week's days as dots, and today's goal.
+struct StreakView: View {
+    let tree: Tree
+    let now: Date
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Image(systemName: "flame.fill")
+                    .font(.title2)
+                    .foregroundStyle(flameColor)
+                    .symbolEffect(.bounce, value: tree.studiedToday)
+                Text("\(tree.streak)")
+                    .font(.title.weight(.bold))
+                    .monospacedDigit()
+                Text(tree.streak == 1 ? "day in a row" : "days in a row")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                Spacer(minLength: 8)
+                if tree.streak > 1 {
+                    Text("Grows ×\(tree.nextDayMultiplier.formatted(.number.precision(.fractionLength(1))))")
+                        .font(.caption.weight(.semibold))
                         .monospacedDigit()
                         .foregroundStyle(LittoStyle.review)
                 }
-                Text(tree.healthText)
+            }
+            .accessibilityElement(children: .combine)
+            WeekDots(week: tree.week, now: now)
+            goal
+        }
+    }
+
+    private var flameColor: Color {
+        tree.streak == 0 ? .secondary : tree.studiedToday ? .orange : .orange.opacity(0.45)
+    }
+
+    @ViewBuilder
+    private var goal: some View {
+        if tree.studiedToday {
+            Label("Today's goal done. See you tomorrow!", systemImage: "checkmark.seal.fill")
+                .font(.footnote)
+                .foregroundStyle(LittoStyle.review)
+        } else {
+            VStack(alignment: .leading, spacing: 4) {
+                ProgressView(value: Double(min(tree.answersToday, Tree.answersPerDay)), total: Double(Tree.answersPerDay))
+                    .tint(.orange)
+                    .accessibilityHidden(true)
+                Text(tree.streak > 0
+                     ? "Today: \(tree.answersToday)/\(Tree.answersPerDay) answers to keep the streak"
+                     : "Today: \(tree.answersToday)/\(Tree.answersPerDay) answers to start a streak")
                     .font(.footnote)
-                    .foregroundStyle(tree.health == .healthy ? Color.secondary : LittoStyle.learning)
-                    .lineLimit(2...4)
+                    .monospacedDigit()
+                    .foregroundStyle(.secondary)
             }
         }
-        .padding(.vertical, 8)
-        .accessibilityElement(children: .combine)
+    }
+}
+
+/// The last seven days, today last: a filled dot when that day counted.
+struct WeekDots: View {
+    let week: [Bool]
+    let now: Date
+
+    var body: some View {
+        let calendar = Calendar.current
+        let today = StudyDay.start(of: now)
+        HStack(spacing: 0) {
+            ForEach(Array(week.enumerated()), id: \.offset) { index, done in
+                let date = calendar.date(byAdding: .day, value: index - (week.count - 1), to: today) ?? today
+                let isToday = index == week.count - 1
+                VStack(spacing: 4) {
+                    ZStack {
+                        Circle()
+                            .fill(done ? Color.orange : Color.secondary.opacity(0.15))
+                        if done {
+                            Image(systemName: "checkmark").font(.caption2.weight(.bold)).foregroundStyle(.white)
+                        }
+                    }
+                    .frame(width: 24, height: 24)
+                    .overlay { if isToday && !done { Circle().strokeBorder(Color.orange, lineWidth: 2) } }
+                    Text(calendar.veryShortWeekdaySymbols[calendar.component(.weekday, from: date) - 1])
+                        .font(.caption2)
+                        .foregroundStyle(isToday ? .primary : .secondary)
+                }
+                .frame(maxWidth: .infinity)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(Text(date, format: .dateTime.weekday(.wide)) + Text(done ? ", studied" : ", not studied"))
+            }
+        }
     }
 }
 
@@ -137,22 +243,38 @@ struct TreeDrawing: View {
     }
 }
 
-/// Shown when a session ends: whether today already counts for the tree.
-struct TreeTodayNote: View {
-    @Query private var today: [ReviewEntry]
-
-    init(now: Date = Date()) {
-        let start = StudyDay.start(of: now)
-        _today = Query(filter: #Predicate<ReviewEntry> { $0.date >= start })
-    }
+/// Shown when a session ends: the streak, today's goal and how the tree is doing.
+struct SessionReward: View {
+    @Query private var reviews: [ReviewEntry]
+    @Query(filter: learnedFilter) private var learned: [StudyCard]
 
     var body: some View {
-        if today.count >= Tree.answersPerDay {
-            Label("Your tree grew today", systemImage: "leaf")
-                .foregroundStyle(LittoStyle.review)
-        } else {
-            Label("\(Tree.answersPerDay - today.count) more answers and your tree grows today", systemImage: "leaf")
-                .foregroundStyle(.secondary)
+        let now = Date()
+        let tree = Tree.current(from: reviews, learnedWords: learned.count, now: now)
+        VStack(spacing: 12) {
+            HStack(spacing: 16) {
+                TreeDrawing(tree: tree)
+                    .frame(width: 54, height: 72)
+                    .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 4) {
+                    Label("\(tree.streak)", systemImage: "flame.fill")
+                        .font(.title2.weight(.bold))
+                        .monospacedDigit()
+                        .foregroundStyle(tree.studiedToday ? Color.orange : Color.secondary)
+                        .symbolEffect(.bounce, value: tree.studiedToday)
+                        .accessibilityLabel("Streak: \(tree.streak) days")
+                    Text("\(tree.stageName) · \(tree.heightText)")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+            }
+            if tree.studiedToday {
+                Label("Your tree grew today", systemImage: "leaf")
+                    .foregroundStyle(LittoStyle.review)
+            } else {
+                Label("\(Tree.answersPerDay - tree.answersToday) more answers and your tree grows today", systemImage: "leaf")
+                    .foregroundStyle(.secondary)
+            }
         }
     }
 }

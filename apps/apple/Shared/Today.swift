@@ -96,7 +96,8 @@ struct StudySettingsSection: View {
 struct TodayCard: View {
     let decks: [Deck]
     let now: Date
-    var onStart: () -> Void
+    /// Starts today's session with this many minutes (0 = no limit).
+    var onStart: (Int) -> Void
     @AppStorage(StudySettings.sessionMinutesKey) private var minutes = StudySettings.defaultMinutes
     @Bindable private var router = AppRouter.shared
 
@@ -114,13 +115,26 @@ struct TodayCard: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .lineLimit(2...4)
-                Button(action: onStart) {
-                    Text(minutes > 0 ? "Start · \(minutes) min" : "Start")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity, minHeight: LittoStyle.minTarget)
+                Text("Quick session")
+                    .font(.subheadline.weight(.semibold))
+                HStack(spacing: 8) {
+                    ForEach(choices, id: \.self) { choice in
+                        let label = Text(choice > 0 ? "\(choice) min" : "No limit")
+                            .font(.headline)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.7)
+                            .frame(maxWidth: .infinity, minHeight: LittoStyle.minTarget)
+                        if choice == minutes {
+                            Button { onStart(choice) } label: { label }
+                                .buttonStyle(.borderedProminent)
+                                .buttonBorderShape(.roundedRectangle(radius: 12))
+                        } else {
+                            Button { onStart(choice) } label: { label }
+                                .buttonStyle(.bordered)
+                                .buttonBorderShape(.roundedRectangle(radius: 12))
+                        }
+                    }
                 }
-                .buttonStyle(.borderedProminent)
-                .buttonBorderShape(.roundedRectangle(radius: 12))
                 Button("See today's words") { router.showTodayWords = true }
                     .buttonStyle(.borderless)
                     .font(.subheadline)
@@ -128,6 +142,11 @@ struct TodayCard: View {
         }
         .padding(.vertical, 8)
         .sheet(isPresented: $router.showTodayWords) { PendingWordsView(pile: pile) }
+    }
+
+    /// 5, 10 and 15 minutes, plus the length from Settings when it is another one.
+    private var choices: [Int] {
+        StudySettings.quickChoices.contains(minutes) ? StudySettings.quickChoices : StudySettings.quickChoices + [minutes]
     }
 
     private func detail(estimate: TimeInterval) -> String {
