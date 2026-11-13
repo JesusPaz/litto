@@ -1,7 +1,7 @@
 import Foundation
 
 /// Litto means "little tree". Every day you study, the tree grows a little; a streak makes it
-/// grow faster; days away dry it out until you come back. It never shrinks: dryness is a warning,
+/// grow faster; every word you learn adds a little more; days away dry it out until you come back. It never shrinks: dryness is a warning,
 /// not a punishment. Everything is derived from review dates, so it syncs with the reviews.
 public struct Tree: Equatable, Sendable {
     public enum Stage: Int, CaseIterable, Sendable {
@@ -25,6 +25,8 @@ public struct Tree: Equatable, Sendable {
     public static let maxHeight = 115.0
     /// One ring per this many study days.
     public static let daysPerRing = 7
+    /// Growth points per learned word: a hundred words grow it about as much as a month of study.
+    public static let growthPerWord = 0.3
 
     public var studyDays: Int
     public var streak: Int
@@ -33,6 +35,12 @@ public struct Tree: Equatable, Sendable {
     public var growth: Double
     public var health: Health
     public var studiedToday: Bool
+    /// Answers given today, towards `answersPerDay`.
+    public var answersToday: Int = 0
+    /// Words that have left the learning steps at least once.
+    public var learnedWords: Int = 0
+    /// The last seven study days, oldest first and today last: true when that day counted.
+    public var week: [Bool] = []
 
     public var heightMeters: Double { Self.height(for: growth) }
     public var rings: Int { studyDays / Self.daysPerRing }
@@ -48,21 +56,26 @@ public struct Tree: Equatable, Sendable {
         0.05 + maxHeight * (1 - exp(-growth / 1800))
     }
 
+    /// Height where each stage after the seed begins.
+    static let stageHeights: [Double] = [0.1, 0.5, 2, 8, 25, 60, 100]
+
     static func stage(for height: Double) -> Stage {
-        switch height {
-        case ..<0.1: .seed
-        case ..<0.5: .sprout
-        case ..<2: .sapling
-        case ..<8: .young
-        case ..<25: .tree
-        case ..<60: .great
-        case ..<100: .giant
-        default: .sequoia
-        }
+        Stage(rawValue: stageHeights.filter { height >= $0 }.count) ?? .sequoia
+    }
+
+    /// The stage the tree reaches next, nil for a sequoia.
+    public var nextStage: Stage? { Stage(rawValue: stage.rawValue + 1) }
+
+    /// How far it is from the current stage to the next, 0 to 1.
+    public var stageProgress: Double {
+        guard nextStage != nil else { return 1 }
+        let from = stage == .seed ? 0.05 : Self.stageHeights[stage.rawValue - 1]
+        let to = Self.stageHeights[stage.rawValue]
+        return min(1, max(0, (heightMeters - from) / (to - from)))
     }
 
     /// `answersByDay` maps each study day's start (see `StudyDay`) to the answers given that day.
-    public static func grow(answersByDay: [Date: Int], now: Date, calendar: Calendar = .current) -> Tree {
+    public static func grow(answersByDay: [Date: Int], learnedWords: Int = 0, now: Date, calendar: Calendar = .current) -> Tree {
         let today = StudyDay.start(of: now, calendar: calendar)
         let days = answersByDay.filter { $0.value >= answersPerDay }.keys.sorted()
         var growth = 0.0, streak = 0, best = 0
@@ -87,7 +100,13 @@ public struct Tree: Equatable, Sendable {
         case 3...6: .drying
         default: .dry
         }
+        growth += Double(max(learnedWords, 0)) * growthPerWord
+        let counted = Set(days)
+        let week = (0..<7).reversed().map { back in
+            calendar.date(byAdding: .day, value: -back, to: today).map(counted.contains) ?? false
+        }
         return Tree(studyDays: days.count, streak: streak, bestStreak: best, growth: growth,
-                    health: days.isEmpty ? .healthy : health, studiedToday: studiedToday)
+                    health: days.isEmpty ? .healthy : health, studiedToday: studiedToday,
+                    answersToday: answersByDay[today] ?? 0, learnedWords: learnedWords, week: week)
     }
 }

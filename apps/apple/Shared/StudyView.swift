@@ -9,8 +9,10 @@ struct StudyView: View {
     @State private var feedback = 0
     @AppStorage("autoSpeak") private var autoSpeak = true
 
-    init(decks: [Deck], title: String, context: ModelContext) {
-        _session = State(initialValue: StudySession(decks: decks, title: title, context: context))
+    /// `minutes` overrides the session length from Settings; 0 means no limit.
+    init(decks: [Deck], title: String, context: ModelContext, minutes: Int? = nil) {
+        let limit = minutes.map { $0 > 0 ? TimeInterval($0 * 60) : nil } ?? StudySettings.limit
+        _session = State(initialValue: StudySession(decks: decks, title: title, context: context, limit: limit))
     }
 
     var body: some View {
@@ -72,7 +74,7 @@ struct StudyView: View {
                 .frame(maxWidth: LittoStyle.readableWidth)
             #if os(macOS)
             Text(session.showingAnswer
-                 ? "1–4 answer · S listen · E example · D dictionary · ⌘Z undo · Esc close"
+                 ? "1–\(Recall.choices(for: card.state).count) answer · S listen · E example · D dictionary · ⌘Z undo · Esc close"
                  : "Space show answer · S listen · ⌘Z undo · Esc close")
                 .font(.caption)
                 .foregroundStyle(.secondary)
@@ -170,26 +172,31 @@ struct StudyView: View {
 
     @ViewBuilder
     private var controls: some View {
-        if session.showingAnswer {
-            let intervals = session.intervals()
-            HStack(spacing: 8) {
-                ForEach(Grade.allCases) { grade in
-                    Button {
-                        feedback += 1
-                        session.answer(grade)
-                    } label: {
-                        VStack(spacing: 2) {
-                            Text(grade.title).font(.headline).lineLimit(1).minimumScaleFactor(0.7)
-                            Text(intervals[grade] ?? "").font(.caption).monospacedDigit()
+        if session.showingAnswer, let card = session.current {
+            let choices = session.choices()
+            VStack(spacing: 8) {
+                Text(Recall.question(for: card.state))
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(.secondary)
+                HStack(spacing: 8) {
+                    ForEach(Array(choices.enumerated()), id: \.element.recall) { index, choice in
+                        Button {
+                            feedback += 1
+                            session.answer(choice.recall)
+                        } label: {
+                            VStack(spacing: 2) {
+                                Text(choice.recall.title).font(.headline).lineLimit(1).minimumScaleFactor(0.6)
+                                Text("Back in \(choice.back)").font(.caption).monospacedDigit().lineLimit(1).minimumScaleFactor(0.7)
+                            }
+                            .frame(maxWidth: .infinity, minHeight: 52)
                         }
-                        .frame(maxWidth: .infinity, minHeight: LittoStyle.minTarget)
+                        .buttonStyle(.bordered)
+                        .buttonBorderShape(.roundedRectangle(radius: 12))
+                        .tint(choice.recall.color)
+                        .keyboardShortcut(KeyEquivalent(Character("\(index + 1)")), modifiers: [])
+                        .focusable(false) // Otherwise Space could press the last answer again.
+                        .accessibilityLabel("\(choice.recall.title), back in \(choice.back)")
                     }
-                    .buttonStyle(.bordered)
-                    .buttonBorderShape(.roundedRectangle(radius: 12))
-                    .tint(grade.color)
-                    .keyboardShortcut(KeyEquivalent(Character("\(grade.rawValue)")), modifiers: [])
-                    .focusable(false) // Otherwise Space could press the last grade again.
-                    .accessibilityLabel("\(grade.title), back in \(intervals[grade] ?? "")")
                 }
             }
         } else {
@@ -213,9 +220,9 @@ struct StudyView: View {
         return ContentUnavailableView {
             Label(timeUp ? "Session done" : "All caught up", systemImage: "checkmark.circle")
         } description: {
-            VStack(spacing: 8) {
+            VStack(spacing: 12) {
                 Text(summary)
-                TreeTodayNote()
+                SessionReward()
                 if left.counts.total > 0 {
                     Text("\(left.counts.total) cards left (\(Minutes.text(left.estimate()))). They continue tomorrow, no rush.")
                 } else if let next = session.decksNextDue {
@@ -235,9 +242,12 @@ struct StudyView: View {
 
     private var summary: String {
         let minutes = Minutes.text(session.elapsed())
-        return session.newCount > 0
+        var parts = [session.newCount > 0
             ? String(localized: "\(minutes) · \(session.reviewedCount) answers, \(session.newCount) new.")
-            : String(localized: "\(minutes) · \(session.reviewedCount) answers.")
+            : String(localized: "\(minutes) · \(session.reviewedCount) answers.")]
+        if session.learnedCount > 0 { parts.append(String(localized: "\(session.learnedCount) words learned.")) }
+        if session.bestCombo >= 3 { parts.append(String(localized: "Best run: \(session.bestCombo) in a row.")) }
+        return parts.joined(separator: " ")
     }
 
     private func reveal() {
@@ -261,6 +271,14 @@ private struct SessionHeader: View {
                 HStack {
                     CountsLine(counts: session.counts)
                     Spacer(minLength: 8)
+                    if session.combo >= 3 {
+                        Label("\(session.combo)", systemImage: "flame.fill")
+                            .font(.subheadline.weight(.bold))
+                            .monospacedDigit()
+                            .foregroundStyle(.orange)
+                            .symbolEffect(.bounce, value: session.combo)
+                            .accessibilityLabel("\(session.combo) in a row")
+                    }
                     if let remaining = session.remaining(at: timeline.date) {
                         Text(remaining > 60 ? "\(Int((remaining / 60).rounded(.up))) min left" : "last minute")
                             .font(.subheadline)

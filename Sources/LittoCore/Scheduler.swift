@@ -15,6 +15,39 @@ public enum Grade: Int, CaseIterable, Sendable, Identifiable {
     }
 }
 
+/// What the learner says after seeing the answer, in plain words. Each one maps to an FSRS grade,
+/// and which ones are offered depends on the card, so there is never a button that does not fit.
+public enum Recall: String, CaseIterable, Sendable, Identifiable {
+    /// A new word the learner did not know: it comes back in a few minutes to settle.
+    case newToMe
+    /// A new word the learner already knew: it skips the learning steps.
+    case alreadyKnew
+    case forgot
+    case struggled
+    case remembered
+
+    public var id: String { rawValue }
+
+    public var grade: Grade {
+        switch self {
+        case .newToMe: .good
+        case .alreadyKnew: .easy
+        case .forgot: .again
+        case .struggled: .hard
+        case .remembered: .good
+        }
+    }
+
+    /// The buttons for a card in this state, from worst to best.
+    public static func choices(for state: MemoryState) -> [Recall] {
+        switch state {
+        case .new: [.newToMe, .alreadyKnew]
+        case .learning, .relearning: [.forgot, .remembered]
+        case .review: [.forgot, .struggled, .remembered]
+        }
+    }
+}
+
 public enum MemoryState: Int, Sendable {
     case new = 0, learning, review, relearning
 

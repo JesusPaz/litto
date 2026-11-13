@@ -1,6 +1,9 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "%@ · %@": {
+      "shouldTranslate": false
+    },
     "%@ · %lld answers, %lld new.": {
       "localizations": {
         "en": {
@@ -161,15 +164,15 @@
         }
       }
     },
-    "%@ · %lld rings": {
+    "%@ · %lld words learned": {
       "localizations": {
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%1$@ · %#@rings@"
+            "value": "%1$@ · %#@words@"
           },
           "substitutions": {
-            "rings": {
+            "words": {
               "argNum": 2,
               "formatSpecifier": "lld",
               "variations": {
@@ -177,13 +180,13 @@
                   "one": {
                     "stringUnit": {
                       "state": "translated",
-                      "value": "%arg ring"
+                      "value": "%arg word learned"
                     }
                   },
                   "other": {
                     "stringUnit": {
                       "state": "translated",
-                      "value": "%arg rings"
+                      "value": "%arg words learned"
                     }
                   }
                 }
@@ -194,10 +197,10 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "%1$@ · %#@rings@"
+            "value": "%1$@ · %#@words@"
           },
           "substitutions": {
-            "rings": {
+            "words": {
               "argNum": 2,
               "formatSpecifier": "lld",
               "variations": {
@@ -205,13 +208,13 @@
                   "one": {
                     "stringUnit": {
                       "state": "translated",
-                      "value": "%arg anillo"
+                      "value": "%arg palabra aprendida"
                     }
                   },
                   "other": {
                     "stringUnit": {
                       "state": "translated",
-                      "value": "%arg anillos"
+                      "value": "%arg palabras aprendidas"
                     }
                   }
                 }
@@ -226,7 +229,7 @@
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "%@, vuelve en %@"
+            "value": "%1$@, vuelve en %2$@"
           }
         }
       }
@@ -394,6 +397,16 @@
         }
       }
     },
+    "%lld in a row": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld seguidas"
+          }
+        }
+      }
+    },
     "%lld min": {
       "localizations": {
         "es": {
@@ -524,59 +537,39 @@
         }
       }
     },
-    "%lld-day streak · grows ×%@": {
+    "%lld words learned.": {
       "localizations": {
         "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%#@streak@ · grows ×%2$@"
-          },
-          "substitutions": {
-            "streak": {
-              "argNum": 1,
-              "formatSpecifier": "lld",
-              "variations": {
-                "plural": {
-                  "one": {
-                    "stringUnit": {
-                      "state": "translated",
-                      "value": "%arg-day streak"
-                    }
-                  },
-                  "other": {
-                    "stringUnit": {
-                      "state": "translated",
-                      "value": "%arg-day streak"
-                    }
-                  }
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld word learned."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld words learned."
                 }
               }
             }
           }
         },
         "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%#@streak@ · crece ×%2$@"
-          },
-          "substitutions": {
-            "streak": {
-              "argNum": 1,
-              "formatSpecifier": "lld",
-              "variations": {
-                "plural": {
-                  "one": {
-                    "stringUnit": {
-                      "state": "translated",
-                      "value": "Racha de %arg día"
-                    }
-                  },
-                  "other": {
-                    "stringUnit": {
-                      "state": "translated",
-                      "value": "Racha de %arg días"
-                    }
-                  }
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld palabra aprendida."
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld palabras aprendidas."
                 }
               }
             }
@@ -584,12 +577,32 @@
         }
       }
     },
-    "1–4 answer · S listen · E example · D dictionary · ⌘Z undo · Esc close": {
+    ", not studied": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "1–4 responder · S escuchar · E ejemplo · D diccionario · ⌘Z deshacer · Esc cerrar"
+            "value": ", sin estudiar"
+          }
+        }
+      }
+    },
+    ", studied": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": ", estudiado"
+          }
+        }
+      }
+    },
+    "1–%lld answer · S listen · E example · D dictionary · ⌘Z undo · Esc close": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1–%lld responder · S escuchar · E ejemplo · D diccionario · ⌘Z deshacer · Esc cerrar"
           }
         }
       }
@@ -600,16 +613,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "5 minutos más"
-          }
-        }
-      }
-    },
-    "Again": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Otra vez"
           }
         }
       }
@@ -680,6 +683,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Pídele a Claude que te cree uno, o importa un mazo de Anki (.apkg) o un archivo JSON."
+          }
+        }
+      }
+    },
+    "Back in %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vuelve en %@"
+          }
+        }
+      }
+    },
+    "Best run: %lld in a row.": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mejor racha de la sesión: %lld seguidas."
           }
         }
       }
@@ -884,6 +907,26 @@
         }
       }
     },
+    "Did you know this word?": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Ya conocías esta palabra?"
+          }
+        }
+      }
+    },
+    "Did you remember it?": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "¿Te acordaste?"
+          }
+        }
+      }
+    },
     "Done": {
       "localizations": {
         "es": {
@@ -934,16 +977,6 @@
         }
       }
     },
-    "Easy": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Fácil"
-          }
-        }
-      }
-    },
     "Example": {
       "localizations": {
         "es": {
@@ -974,6 +1007,16 @@
         }
       }
     },
+    "Forgot": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "No me acordé"
+          }
+        }
+      }
+    },
     "Giant sequoia": {
       "localizations": {
         "es": {
@@ -994,12 +1037,12 @@
         }
       }
     },
-    "Good": {
+    "Got it": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Bien"
+            "value": "Me acordé"
           }
         }
       }
@@ -1014,12 +1057,32 @@
         }
       }
     },
-    "Hard": {
+    "Growing into %@": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
-            "value": "Difícil"
+            "value": "Creciendo hacia %@"
+          }
+        }
+      }
+    },
+    "Grows ×%@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Crece ×%@"
+          }
+        }
+      }
+    },
+    "Hard to recall": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Me costó"
           }
         }
       }
@@ -1040,6 +1103,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sano · estudia hoy para seguir la racha"
+          }
+        }
+      }
+    },
+    "I knew it": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ya me la sabía"
           }
         }
       }
@@ -1200,6 +1273,16 @@
         }
       }
     },
+    "New to me": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Es nueva"
+          }
+        }
+      }
+    },
     "New today": {
       "localizations": {
         "es": {
@@ -1216,6 +1299,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lo próximo vuelve %@."
+          }
+        }
+      }
+    },
+    "Next: %@": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siguiente: %@"
           }
         }
       }
@@ -1276,6 +1369,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Progreso"
+          }
+        }
+      }
+    },
+    "Quick session": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sesión rápida"
           }
         }
       }
@@ -1490,22 +1593,52 @@
         }
       }
     },
-    "Start · %lld min": {
-      "localizations": {
-        "es": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Empezar · %lld min"
-          }
-        }
-      }
-    },
     "Status": {
       "localizations": {
         "es": {
           "stringUnit": {
             "state": "translated",
             "value": "Estado"
+          }
+        }
+      }
+    },
+    "Streak: %lld days": {
+      "localizations": {
+        "en": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Streak: %lld day"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Streak: %lld days"
+                }
+              }
+            }
+          }
+        },
+        "es": {
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Racha: %lld día"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "Racha: %lld días"
+                }
+              }
+            }
           }
         }
       }
@@ -1640,6 +1773,16 @@
         }
       }
     },
+    "Today's goal done. See you tomorrow!": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Meta de hoy cumplida. ¡Nos vemos mañana!"
+          }
+        }
+      }
+    },
     "Today's words": {
       "localizations": {
         "es": {
@@ -1760,6 +1903,26 @@
         }
       }
     },
+    "Today: %lld/%lld answers to keep the streak": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoy: %1$lld/%2$lld respuestas para mantener la racha"
+          }
+        }
+      }
+    },
+    "Today: %lld/%lld answers to start a streak": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoy: %1$lld/%2$lld respuestas para empezar una racha"
+          }
+        }
+      }
+    },
     "Tree": {
       "localizations": {
         "es": {
@@ -1856,6 +2019,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hoy tu árbol creció"
+          }
+        }
+      }
+    },
+    "day in a row": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "día seguido"
+          }
+        }
+      }
+    },
+    "days in a row": {
+      "localizations": {
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "días seguidos"
           }
         }
       }
